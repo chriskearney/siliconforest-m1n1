@@ -362,13 +362,13 @@ static void setup(void)
         assert(fdt_setprop_string(dt, fdt_path_offset(dt, "/aliases"), aliases[i], path) == 0);
         assert(fdt_setprop_u32(dt, fdt_path_offset(dt, path), "phandle", 100 + i) == 0);
         assert(fdt_setprop_u32(dt, fdt_path_offset(dt, path),
-                               i < 2 ? "#iommu-cells" : "#mbox-cells", 1) == 0);
+                               i < 2 ? "#iommu-cells" : "#mbox-cells", i < 2 ? 1 : 0) == 0);
         assert(fdt_setprop_string(dt, fdt_path_offset(dt, path), "status", "okay") == 0);
     }
     for (int i = 0; i < 2; i++) {
         const char *name = i ? "/soc/dcpext" : "/soc/dcp";
         fdt32_t iommu[] = {cpu_to_fdt32(100 + i), 0};
-        fdt32_t mbox[] = {cpu_to_fdt32(102 + i), 0};
+        fdt32_t mbox[] = {cpu_to_fdt32(102 + i)};
         assert(fdt_setprop(dt, fdt_path_offset(dt, name), "iommus", iommu,
                            sizeof(iommu)) == 0);
         assert(fdt_setprop(dt, fdt_path_offset(dt, i ? "/soc/dispext0" : "/soc/disp0"),
@@ -498,6 +498,9 @@ int main(void)
     check_status("dcp", "okay");
     check_status("disp0", "okay");
     check_status("dcpext", "okay");
+    const fdt32_t *preflight = fdt_getprop(dt, fdt_path_offset(dt, "/chosen"),
+                                         "asahi,external-display-preflight", NULL);
+    assert(preflight && fdt32_to_cpu(*preflight) == 0x100);
     check_status("dispext0", "disabled");
     assert(reservation_calls == 11);
     assert(fdt_path_offset(dt, "/reserved-memory/framebuffer@101eb4b8000") >= 0);
