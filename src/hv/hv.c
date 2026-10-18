@@ -265,7 +265,7 @@ int hv_start(void *entry, u64 regs[4])
 
     if (!hv_cpu_power_init()) {
         printf("HV: CPU power protection hooks failed; can't start the hypervisor\n");
-        return;
+        return -1;
     }
 
     if (!hv_cpu_state_setup_hook()) {

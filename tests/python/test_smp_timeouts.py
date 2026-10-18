@@ -118,6 +118,9 @@ typedef uint64_t u64;
 #define smp_call0(cpu, fn) smp_call4(cpu, fn, 0, 0, 0, 0)
 static int calls, waits, fail_call, fail_wait, dispatch_error = -1;
 static int boot_cpu_idx;
+enum { SPTM_NONE, SPTM_EMULATION };
+static int hv_sptm_mode = SPTM_NONE;
+static void hv_sprr_init_secondary(int cpu) {}
 static bool hv_started_cpus[MAX_CPUS], hv_setup_pending[MAX_CPUS], hv_shutdown_failed;
 static u64 hv_cpus_in_guest;
 static int hv_secondary_info;
@@ -239,6 +242,8 @@ static bool hv_started_cpus[MAX_CPUS], hv_should_exit[MAX_CPUS], hv_setup_pendin
 static bool hv_shutdown_failed;
 static u64 hv_cpus_in_guest;
 static int boot_cpu_idx, bhl, locked, waits, failed_cpu = -1, watchdog_error;
+static bool power_hook_failure;
+static bool hv_cpu_power_init(void) { return !power_hook_failure; }
 static void spin_lock(int *lock) { assert(!locked); locked = 1; }
 static void spin_unlock(int *lock) { assert(locked); locked = 0; }
 static bool hv_cpu_state_setup_hook(void) { return true; }
@@ -274,6 +279,9 @@ int main(void)
     watchdog_error = 0;
     assert(check_start(NULL, NULL) == -1 && !hv_shutdown_failed);
     assert(check_start(NULL, NULL) == 0);
+    power_hook_failure = true;
+    assert(check_start(NULL, NULL) == -1);
+    power_hook_failure = false;
     hv_setup_pending[3] = true;
     failed_cpu = 3;
     assert(hv_join_cpus() == -1 && hv_setup_pending[3] && hv_shutdown_failed);

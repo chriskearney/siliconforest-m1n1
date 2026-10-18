@@ -991,7 +991,9 @@ static void sprr_drop_asid(u64 asid)
 static bool hv_sprr_gxf_tlbi(void)
 {
     sysop("dsb sy");
-    sysop("tlbi vmalls12e1os");
+    /* TLBI VMALLS12E1OS: keep the Armv8.2 build baseline. The mnemonic
+     * otherwise requires enabling FEAT_TLBIRMI in the assembler globally. */
+    sysop(".inst 0xd50c81df");
     sysop("dsb sy");
     sysop("isb");
 
