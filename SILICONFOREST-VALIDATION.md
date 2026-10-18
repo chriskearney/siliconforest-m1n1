@@ -39,6 +39,9 @@ python3 tests/run-t8122-25g83-board.py
 
 The focused GitHub workflow runs provenance, the Python suite and four host
 runners. It does not claim a complete cross-build or a green complete G15 suite.
+The standalone runners require a host C compiler, LLVM tools, dtc and a QEMU
+AArch64 userspace interpreter. The first CI run passed Python but exposed the
+missing QEMU package; that runner dependency is now explicit.
 
 ## Inherited G15 failures
 

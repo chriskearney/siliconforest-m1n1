@@ -20,7 +20,7 @@ jobs:
       - name: Install host check dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang llvm lld device-tree-compiler python3-venv
+          sudo apt-get install -y clang llvm lld device-tree-compiler qemu-user python3-venv
           python3 -m venv .venv
           .venv/bin/pip install -r requirements.txt pytest
       - name: Check sources and host regressions
