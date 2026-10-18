@@ -47,6 +47,12 @@ def main():
         assert uuid in (ROOT / "src/kboot.c").read_text()
         assert uuid in (kernel / "drivers/gpu/drm/apple-m3/dcp.c").read_text()
         assert 'apple,agx-t8140' in (kernel / "drivers/gpu/drm/asahi-m3/driver.rs").read_text()
+        for constraint in data.get("boot_chain_constraints", []):
+            subprocess.run(["git", "-C", str(kernel), "merge-base", "--is-ancestor",
+                            constraint["minimum_kernel_commit"], "HEAD"], check=True)
+        marker = '"apple,t8122-dcpext-firmware-ready"'
+        assert marker in (ROOT / "src/kboot.c").read_text()
+        assert marker in (kernel / "drivers/soc/apple/t6030-display-gate.c").read_text()
         subprocess.run(["python3", str(mesa / "tools/siliconforest/check-kernel-abi.py"), str(kernel)], check=True)
         print("Pinned kernel/Mesa, J514S firmware identity and native wire ABI matched")
     print(f"{len(tags)} public source records checked; hardware qualification remains separate")

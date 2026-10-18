@@ -77,3 +77,36 @@ The old G15 synthetic stand-in test suite is not green: the same ten failures
 occur on both the original pin and this integration. They were neither treated
 as passes nor addressed by weakening production identity admission. Details and
 all validation limits are in SILICONFOREST-VALIDATION.md.
+
+
+## J613 firmware-ready follow-up
+
+Public patch: [Marius Gehrmann's source](https://github.com/GehrmannSolutions/omarchy-m3-air/blob/5f0d61514cf2bf2ec598850bcca4e007c0c1f083/boot/m1n1-aurora-t8122-dcpext.patch),
+blob and SHA256 recorded in the manifest. The import credits Marius as author
+and preserves his MIT notice. The patch supplied no Signed-off-by, and none
+was invented. Its weak wcslen fallback was omitted because current upstream's
+Rust 1.99 workaround already links without it.
+
+The original marker change relies on a common helper that could return success
+when reservation allocation failed, and could leave partial firmware properties.
+The downstream fix propagates that failure and validates segment-list shape.
+T8122 publication additionally checks bounded, aligned physical spans against
+exact DRAM metadata and runs each controller update on a scratch FDT. An old
+marker is withdrawn before retry. The marker is written last, after complete
+reservation and firmware publication; supplier, controller and route status is
+never enabled by this path. Missing metadata, allocation failure, a partial
+second reservation, firmware-copy failure and marker failure are exercised
+against production functions with real FDTs. The existing enable=true path has
+a positive control, and foreign chip/tree controls refuse T8122 publication.
+
+The paired J613 DTB now includes the disabled internal DCP Type-C route.
+Minimum kernel commit is 17a9930f20a0895b5980385b0b2d67edda8a24be; use a
+matching kernel and DTB from one pin. The internal panel additionally depends
+on atcphy1 probing. The new kernel carry is in normal drm/apple and the normal
+display gate, not the alternative M3 copies. Its external gate still requires
+firmware-compat 14.7.0. Camera support on 26.6.2 is a separate statement.
+
+The contributor's hardware evidence is in omacom/linux-aurora issue 103 and
+PR114. Our validation adds host failure injection and internal-display checks
+against the exact new DTB; it is not a new physical display or suspend test.
+The existing M3 relocation algorithm and T6030 PMP chosen export are unchanged.

@@ -2105,11 +2105,11 @@
       "tested": false
     }
   ],
-  "reviewed_code_commit": "04fe540ef7fa58404145eb28ec40f1af0906d21e",
+  "reviewed_code_commit": "1ecaa8c59d55e0b51275f6ebc063808c2c70bd21",
   "kernel": {
     "repository": "https://github.com/iconidentify/siliconforest-linux",
     "branch": "siliconforest/next",
-    "commit": "6a421d4e76ff282b414138182fd28597ebf20a18",
+    "commit": "17a9930f20a0895b5980385b0b2d67edda8a24be",
     "native_abi_config": "CONFIG_SILICONFOREST_M3=y"
   },
   "mesa": {
@@ -2120,9 +2120,34 @@
   "scope": "Public-source discovery snapshot. An archived source ref is evidence, not approval or hardware qualification. Private Mesa research remains local.",
   "upstream_integrated": "25b1d89ca50be848b136ce771ce7167244852a91",
   "reviewed_source_trees": {
-    "src": "7c1c22fcaa1471cd9e78f2cd07cf5579520908b6",
+    "src": "d1dc03c4a135fdf2fd44013f6582890c4c2662a7",
     "rust": "b98d7253c030c276fc9627ff2f61b24d35dc754d",
     "Makefile": "adb9e7b78c2d6429559747047fd44c417ec38db0"
   },
-  "reviewed_test_tree": "87127fee78b2fd12d4a5ccf3433dd5b8d4ec75a7"
+  "reviewed_test_tree": "211d36c4e0359df6e88df231cfda59b6921b3400",
+  "patch_sources": [
+    {
+      "repository": "https://github.com/GehrmannSolutions/omarchy-m3-air",
+      "visibility": "public",
+      "source_commit": "5f0d61514cf2bf2ec598850bcca4e007c0c1f083",
+      "path": "boot/m1n1-aurora-t8122-dcpext.patch",
+      "blob": "bc70af36681ec49571bd2390fa1c694247d05aca",
+      "sha256": "174f88c3b238546352ff369a57a06556bd190e43696c3c2bbe5e4491ae3ef07b",
+      "author": "Marius Gehrmann <marius@gehrmann.solutions>",
+      "license": "MIT; additional notice retained in 3rdparty_licenses/LICENSE.Marius-Gehrmann",
+      "import_commit": "59533ff7215c44fcf486877fb91461bbdffff198",
+      "adaptation": "kboot.c marker import; omit unnecessary weak wcslen; harden complete reservation and transactional publication downstream",
+      "signed_off_by": "not supplied; not invented"
+    }
+  ],
+  "boot_chain_constraints": [
+    {
+      "board": "apple,j613",
+      "dtb": "apple/t8122-j613.dtb",
+      "minimum_kernel_commit": "17a9930f20a0895b5980385b0b2d67edda8a24be",
+      "policy": "J613 DTBs containing the disabled internal Type-C route must accompany a kernel descended from this commit. Assemble kernel and DTBs from the same locked source revision.",
+      "external_display_firmware": "14.7.0 in the normal display gate; 26.6.2 camera support does not qualify external display on 26.6.2",
+      "profile": "normal kernel display path; the alternative M3 copies do not contain the clamshell carry"
+    }
+  ]
 }

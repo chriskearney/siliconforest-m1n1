@@ -7,7 +7,7 @@ change the compiled src/rust/Makefile trees.
 | Check | Result |
 | --- | --- |
 | Default stage 2, LLVM 22.1.8 / Rust 1.99.0 | Built and linked both ELF forms, raw binary and Mach-O |
-| Main Python suite, resource/firmware readers and new failure-injection controls | 53 passed, 7 platform/environment skips, 10 subtests passed |
+| Main Python suite, resource/firmware readers and new failure-injection controls | 54 passed, 7 platform/environment skips, 10 subtests passed |
 | Boot-logo, relocation gate, payload profile, T6030 display facts, Air PMP/display/full-start/GPU diagnostics, stage 1 config and 25G83 board helpers | 10 standalone runners passed, including ASan/UBSan host controls |
 | Entire standalone G15 scenario inventory | 65 pass, 10 fail; identical failures at original fec93c15 baseline |
 | Neo profile stage 2, LLVM 22.1.8 / Rust 1.89.0 | Built and linked |
@@ -71,3 +71,21 @@ opt in explicitly; no personal ADT capture was collected or used to run it here.
 The Max opt-in is covered separately by production-function fault injection.
 M4/M5 profile snapshots were not built or tested in this run. Host validation
 cannot establish that an inherited firmware session can safely be taken over.
+
+
+## J613 firmware-ready follow-up validation
+
+The updated stage 2 cross-build passes with LLVM 22.1.8 and Rust 1.99.0.
+Python has 54 passes, 7 skips and 10 passing subtests. The new production-code
+regression covers complete reservations, first/second reservation failures,
+firmware-copy and marker failures, missing/short/malformed ADT values, invalid
+physical/remap spans, stale markers and wrong-chip/tree controls. It confirms
+that controller and supplier status stays disabled. The older enable=true
+path still enables its controller without a T8122 marker.
+
+The normal J613 DTB was built directly from kernel
+17a9930f20a0895b5980385b0b2d67edda8a24be. All internal-display host scenarios
+and contract self-checks pass against that DTB and the bundled fixture. This
+checks the FDT handoff; it does not exercise the physical atcphy1 probe or the
+new lid-closed display session. The paired native kernel/Mesa ABI check still
+matches 18 selected facts. Ten inherited G15 fixture failures remain unchanged.

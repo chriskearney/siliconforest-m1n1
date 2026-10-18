@@ -19,7 +19,8 @@ or check helpers installs a payload or changes a machine's boot policy.
 The default branch incorporates Asahi upstream through
 `25b1d89ca50be848b136ce771ce7167244852a91` (2026-10-18), the four Max commits
 through `a2b3a4ad018c12b83980f052e51a1560855fa15f`, Eryk's five J514S
-handoff commits from public PR34, and the public T8122 26.6.2 ISP heap fix.
+handoff commits from public PR34, the public T8122 26.6.2 ISP heap fix, and
+Marius Gehrmann's public J613 external-firmware marker patch.
 [The source manifest](SILICONFOREST-SOURCES.json) pins 175 public branch/PR
 snapshots and records 93 PRs. Snapshot tags preserve research; they do not mean
 all those changes are merged or approved.
@@ -49,6 +50,23 @@ Read [the review](SILICONFOREST-REVIEW.md) and
 [validation report](SILICONFOREST-VALIDATION.md) before choosing a profile.
 Physical boot, firmware takeover, GPU rendering, suspend and recovery are not
 qualified by a cross-build or host test. No install one-liner is published yet.
+
+## J613 external-display pairing
+
+The loader now reserves the external processor's firmware after the panel
+handoff and sets `apple,t8122-dcpext-firmware-ready = <1>`. The controller,
+DARTs, mailbox, crossbars and routes remain disabled for the kernel gate. A
+failed reservation or firmware update publishes no marker or partial DT edits.
+
+The paired kernel is `17a9930f20a0895b5980385b0b2d67edda8a24be` or a descendant.
+**Never ship the new J613 DTB with an older kernel:** its disabled internal
+Type-C route is not accepted by the older panel driver. Build the kernel and
+DTBs from one locked source revision. The panel now also waits for atcphy1.
+
+The marker consumer and lid-closed second-display work are in the normal
+kernel display profile. Its external firmware gate admits 14.7.0; the 26.6.2
+camera fix is separate. Do not infer external-display support on 26.6.2 or in
+the alternative M3 display-driver copies from this marker's presence.
 
 ## Build and check
 

@@ -1,8 +1,8 @@
 {
   "date": "2026-10-18",
-  "code_commit": "04fe540ef7fa58404145eb28ec40f1af0906d21e",
+  "code_commit": "1ecaa8c59d55e0b51275f6ebc063808c2c70bd21",
   "source_trees": {
-    "src": "7c1c22fcaa1471cd9e78f2cd07cf5579520908b6",
+    "src": "d1dc03c4a135fdf2fd44013f6582890c4c2662a7",
     "rust": "b98d7253c030c276fc9627ff2f61b24d35dc754d",
     "Makefile": "adb9e7b78c2d6429559747047fd44c417ec38db0"
   },
@@ -14,11 +14,11 @@
   "main_stage2": {
     "built": true,
     "installed": false,
-    "sha256": "bcf2f8ecb10400acf06163d43c63c0d56a040689534e0e7bd7b24bcb18f32784",
+    "sha256": "c9d44f5cf54f3e30c6b651950cc8077e0757563fd8f8e02fea161012c62d5e9a",
     "flags": "#define RELEASE\n"
   },
   "main_pytest": {
-    "passed": 53,
+    "passed": 54,
     "skipped": 7,
     "subtests_passed": 10
   },
@@ -206,5 +206,13 @@
   "hardware_tests": false,
   "stage1_installed": false,
   "boot_policy_changed": false,
-  "reviewed_test_tree": "87127fee78b2fd12d4a5ccf3433dd5b8d4ec75a7"
+  "reviewed_test_tree": "211d36c4e0359df6e88df231cfda59b6921b3400",
+  "j613_dcpext": {
+    "source_patch_import": "59533ff7215c44fcf486877fb91461bbdffff198",
+    "kernel_commit": "17a9930f20a0895b5980385b0b2d67edda8a24be",
+    "dtb_sha256": "eef9ec6f0dce5a217d89263fcdce4682024ab366a2fb51e9f6396de9dea78df1",
+    "internal_display_host_scenarios_with_pinned_dtb": "passed",
+    "production_fault_injection": "passed",
+    "physical_display_test": false
+  }
 }
