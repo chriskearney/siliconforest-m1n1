@@ -1,149 +1,88 @@
-# m1n1: A bootloader and experimentation playground for Apple Silicon
+# SiliconForest m1n1
 
-## Building
+A personally maintained Apple Silicon bootloader and research fork, maintained
+by [iconidentify](https://github.com/iconidentify). AI-assisted development is
+explicitly authorized here. Original contributor history, attribution and
+licenses are preserved. No upstream participation or approval is required to
+maintain this downstream fork.
 
-You need an `aarch64-linux-gnu-gcc` cross-compiler toolchain (or a native one, if running on ARM64).
-You will also need to install the `aarch64-unknown-none-softfloat` toolchain for rust.
+**Development source, not a qualified bootloader release.** Nothing in the build
+or check helpers installs a payload or changes a machine's boot policy.
 
-```shell
-$ rustup target add aarch64-unknown-none-softfloat
+| Profile | Source and intended pairing | Validation here |
+| --- | --- | --- |
+| `siliconforest/next` (default) | Current Asahi upstream plus M3 Air handoffs, Eryk's J514S display/HDMI/SIO and the M3 Max source handoff | Stage 2 cross-build; Python and focused host checks; see known test failures below |
+| [`experimental/neo`](https://github.com/iconidentify/siliconforest-m1n1/tree/experimental/neo) | Separate J700 / T8140 inherited display, CPU/WFE, storage and USB profile | Stage 2 cross-build; 80 Python tests passed, 7 skipped |
+| [`experimental/m4`](https://github.com/iconidentify/siliconforest-m1n1/tree/experimental/m4) | Public J616S / T6040 bring-up | Preserved, unbuilt and unqualified |
+| [`experimental/m5-t6050`](https://github.com/iconidentify/siliconforest-m1n1/tree/experimental/m5-t6050) | DJ's public T6050 ATC/display and J714S research | Preserved, unbuilt and unqualified |
+
+The default branch incorporates Asahi upstream through
+`25b1d89ca50be848b136ce771ce7167244852a91` (2026-10-18), the four Max commits
+through `a2b3a4ad018c12b83980f052e51a1560855fa15f`, Eryk's five J514S
+handoff commits from public PR34, and the public T8122 26.6.2 ISP heap fix.
+[The source manifest](SILICONFOREST-SOURCES.json) pins 175 public branch/PR
+snapshots and records 93 PRs. Snapshot tags preserve research; they do not mean
+all those changes are merged or approved.
+
+## Pairing with SiliconForest Linux and Mesa
+
+Use the exact kernel/Mesa commits in the manifest. Native M3 Pro/Max and Neo Mesa
+requires **the kernel's alternative native UAPI**, selected with
+`CONFIG_SILICONFOREST_M3=y`. Its `asahi-m3` source also includes the G17/Neo driver.
+The normal kernel profile exposes incompatible feature bits and command layouts;
+current Mesa deliberately rejects it on native AGX3 chips. m1n1 cannot repair a
+userspace/kernel ABI mismatch.
+
+For J514S use the kernel's `apple/m3-g15/t6030-j514s.dtb` and its native display
+properties. Other M3 device trees retain their existing handoff. M3 Max GPU
+power/probing now requires **`chosen.asahi,t6031-gpu=1`**; its leakage/power model
+uses stand-ins and remains experimental. The kernel admits only its measured
+J516C board profile and still requires source-derived board data. A loader's
+J514C recognition does not establish kernel or Mesa support for that board.
+
+M3 Air 14.x and 26.6.2/HAL200 profiles remain distinct, with their own exact board,
+firmware and opt-in checks. Use the matching Mesa compatibility profile for the
+Air; the default Mesa M3 Pro/Max/Neo integration is not an Air support claim.
+M4/M5 research is not a complete matched graphics stack.
+
+Read [the review](SILICONFOREST-REVIEW.md) and
+[validation report](SILICONFOREST-VALIDATION.md) before choosing a profile.
+Physical boot, firmware takeover, GPU rendering, suspend and recovery are not
+qualified by a cross-build or host test. No install one-liner is published yet.
+
+## Build and check
+
+The maintained default uses LLVM 22.1.8 and Rust 1.99.0 with the
+`aarch64-unknown-none-softfloat` target. The separate Neo profile uses Rust
+1.89.0. Current upstream's Rust 1.99 LLVM workaround is incompatible with Rust
+1.89; do not reuse the older default toolchain pin.
+
+```sh
+git clone --recurse-submodules --branch siliconforest/next https://github.com/iconidentify/siliconforest-m1n1.git
+cd siliconforest-m1n1
+RUSTUP_TOOLCHAIN=1.99.0 make -j4 RELEASE=1 CHAINLOADING=0 USE_CLANG=1 ARCH=aarch64-linux-gnu
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt pytest
+USE_CLANG=1 .venv/bin/python -m pytest -q tests/python tests/test_t8122_gpu_reader.py tests/test_t8122_gpu_resources.py
+python3 tools/siliconforest/check-sources.py
 ```
 
-```shell
-$ git clone --recursive https://github.com/AsahiLinux/m1n1.git
-$ cd m1n1
-$ make
-```
+This produces an uninstalled stage 2 `build/m1n1.bin`, not a complete `boot.bin`.
+A usable boot chain also needs the exact matching DTBs, U-Boot, firmware and
+machine configuration. Stage 1 remains a separate qualification decision.
 
-To build on a native ARM64 machine:
-* On Linux, use `make ARCH=`.
-* On macOS using Homebrew:
-```shell
-$ brew install llvm lld
-$ make
-```
-* On macOS using MacPorts:
-```shell
-$ sudo port install llvm clang
-$ sudo port select llvm llvm-mp-<version>
-$ make
-```
+**Known inherited test failures:** the G15 standalone suite has 65 passing and
+10 failing old stand-in scenarios, with the identical failures reproduced at the
+original `fec93c15` pin. These fixtures predate stricter Air identity admission.
+The report lists each failure; they have not been hidden by weakening the gate.
+The complete suite is therefore not green.
 
-The output will be in `build/m1n1.macho`.
+## Maintenance and licenses
 
-To build verbosely, use `make V=1`.
+Use explicit reviewed refs when publishing; do not mirror a research checkout.
+Source visibility is checked before publication. Private Mesa research remains
+local under the owner's instruction. See AGENTS.md for the downstream policy.
 
-### Building using the container setup
-
-If you have a container runtime installed, like Podman or Docker, you can make use of the compose setup, which contains all build dependencies.
-
-```shell
-$ git clone --recursive https://github.com/AsahiLinux/m1n1.git
-$ cd m1n1
-$ podman-compose run m1n1 make
-$ # or
-$ docker-compose run m1n1 make
-```
-
-## Usage
-
-Our [wiki](https://asahilinux.org/docs/sw/m1n1-user-guide/) has more information on how to
-use m1n1.
-
-To install on an OS container based on macOS <12.1, use `m1n1.macho`:
-
-```shell
-kmutil configure-boot -c m1n1.macho -v <path to your OS volume>
-```
-
-To install on an OS container based on macOS >=12.1, use `m1n1.bin`:
-
-```shell
-kmutil configure-boot -c m1n1.bin --raw --entry-point 2048 --lowest-virtual-address 0 -v <path to your OS volume>
-```
-
-## Payloads
-
-m1n1 supports running payloads by simple concatenation:
-
-```shell
-$ cat build/m1n1.macho Image.gz build/dtb/apple-j274.dtb initramfs.cpio.gz > m1n1-payload.macho
-$ cat build/m1n1.bin Image.gz build/dtb/apple-j274.dtb initramfs.cpio.gz > m1n1-payload.bin
-```
-
-Supported payload file formats:
-
-* Kernel images (or compatible). Must be compressed or last payload.
-* Devicetree blobs (FDT). May be uncompressed or compressed.
-* Initramfs cpio images. Must be compressed.
-
-Supported compression formats:
-
-* gzip
-* xz
-
-## License
-m1n1 was made available under the terms of the [MIT license](LICENSE.MIT)
-until version 1.9.9. Code present in those releases continues to be available
-under that same license. Starting from version 2.0.0, m1n1 is licensed
-under the terms of the [GNU General Public License version 2](LICENSE) (or later); any
-code checked in thereafter is available under the terms of the GPL exclusively.
-
-* Copyright The Asahi Linux Contributors
-
-Please see the Git history for authorship information.
-
-Portions of m1n1 are based on mini:
-
-* Copyright (C) 2008-2010 Hector Martin "marcan" <marcan@marcan.st>
-* Copyright (C) 2008-2010 Sven Peter <sven@svenpeter.dev>
-* Copyright (C) 2008-2010 Andre Heider <a.heider@gmail.com>
-
-m1n1 embeds libfdt, which is dual [BSD](3rdparty_licenses/LICENSE.BSD-2.libfdt) and
-[GPL-2](3rdparty_licenses/LICENSE.GPL-2) licensed and copyright:
-
-* Copyright (C) 2014 David Gibson <david@gibson.dropbear.id.au>
-* Copyright (C) 2018 embedded brains GmbH
-* Copyright (C) 2006-2012 David Gibson, IBM Corporation.
-* Copyright (C) 2012 David Gibson, IBM Corporation.
-* Copyright 2012 Kim Phillips, Freescale Semiconductor.
-* Copyright (C) 2016 Free Electrons
-* Copyright (C) 2016 NextThing Co.
-
-The ADT code in mini is also based on libfdt and subject to the same license.
-
-m1n1 embeds [minlzma](https://github.com/ionescu007/minlzma), which is
-[MIT](3rdparty_licenses/LICENSE.minlzma) licensed and copyright:
-
-* Copyright (c) 2020 Alex Ionescu
-
-m1n1 embeds a slightly modified version of [tinf](https://github.com/jibsen/tinf), which is
-[ZLIB](3rdparty_licenses/LICENSE.tinf) licensed and copyright:
-
-* Copyright (c) 2003-2019 Joergen Ibsen
-
-m1n1 embeds portions taken from
-[arm-trusted-firmware](https://github.com/ARM-software/arm-trusted-firmware), which is
-[BSD](3rdparty_licenses/LICENSE.BSD-3.arm) licensed and copyright:
-
-* Copyright (c) 2013-2020, ARM Limited and Contributors. All rights reserved.
-
-m1n1 embeds [Doug Lea's malloc](ftp://gee.cs.oswego.edu/pub/misc/malloc.c) (dlmalloc), which is in
-the public domain ([CC0](3rdparty_licenses/LICENSE.CC0)).
-
-m1n1 embeds portions of [PDCLib](https://github.com/DevSolar/pdclib), which is in the public
-domain ([CC0](3rdparty_licenses/LICENSE.CC0)).
-
-m1n1 embeds the [Source Code Pro](https://github.com/adobe-fonts/source-code-pro) font, which is
-licensed under the [OFL-1.1](3rdparty_licenses/LICENSE.OFL-1.1) license and copyright:
-
-* Copyright 2010-2019 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'. All Rights Reserved. Source is a trademark of Adobe in the United States and/or other countries.
-* This Font Software is licensed under the SIL Open Font License, Version 1.1.
-
-m1n1 embeds portions of the [dwc3 usb linux driver](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/core.h?id=7bc5a6ba369217e0137833f5955cf0b0f08b0712), which was [BSD-or-GPLv2 dual-licensed](3rdparty_licenses/LICENSE.BSD-3.dwc3) and copyright
-* Copyright (C) 2010-2011 Texas Instruments Incorporated - http://www.ti.com
-
-m1n1 embeds portions of [musl-libc](https://musl.libc.org/)'s floating point library, which are MIT licensed and copyright
-* Copyright (c) 2017-2018, Arm Limited.
-
-m1n1 embeds some rust crates. Licenses can be found in the vendor directory for every crate.
+This integration includes upstream's GPL transition. Read LICENSE, LICENSE.MIT,
+per-file SPDX notices and 3rdparty_licenses; preserve all applicable notices.
+The original upstream documentation is retained in README.upstream.md.

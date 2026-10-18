@@ -1,0 +1,36 @@
+name: SiliconForest host checks
+
+"on":
+  push:
+    branches: [siliconforest/next]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - name: Install host check dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang llvm lld device-tree-compiler python3-venv
+          python3 -m venv .venv
+          .venv/bin/pip install -r requirements.txt pytest
+      - name: Check sources and host regressions
+        env:
+          USE_CLANG: '1'
+          ASAN_OPTIONS: detect_leaks=0
+        run: |
+          python3 tools/siliconforest/check-sources.py --check-git
+          .venv/bin/python -m pytest -q tests/python tests/test_t8122_gpu_reader.py tests/test_t8122_gpu_resources.py
+          sh tests/run-bootlogo.sh
+          sh tests/run-m3-move-gate.sh
+          sh tests/run-payload-profile.sh
+          sh tests/run-t8122-gpu-diagnostics.sh

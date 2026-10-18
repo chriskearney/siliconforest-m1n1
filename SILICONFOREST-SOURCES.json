@@ -1,0 +1,2128 @@
+{
+  "schema_version": 1,
+  "discovered_on": "2026-10-18",
+  "repository": "https://github.com/iconidentify/siliconforest-m1n1",
+  "default_branch": "siliconforest/next",
+  "visibility_checks": [
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "visibility": "public",
+      "checked_on": "2026-10-18"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "visibility": "public",
+      "checked_on": "2026-10-18"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "visibility": "public",
+      "checked_on": "2026-10-18"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "visibility": "public",
+      "checked_on": "2026-10-18"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "visibility": "public",
+      "checked_on": "2026-10-18"
+    }
+  ],
+  "source_snapshots": [
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "atcphy-new-tunables",
+      "commit": "9657a52e9183d09563fb57396fb36342d7b263d1",
+      "tag": "sources/2026-10-18/asahi/atcphy-new-tunables",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "darwin",
+      "commit": "e19e74be8b7d5f3643cbb4237ee6b8ba2a7d8578",
+      "tag": "sources/2026-10-18/asahi/darwin",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "dcp/m2pro-iboot-lightup",
+      "commit": "cc7acfb65c303396def1d4552ffb57c6ab09ec63",
+      "tag": "sources/2026-10-18/asahi/dcp/m2pro-iboot-lightup",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "dcp-clusterfuck",
+      "commit": "3f6e1fe028226cd77b7bd9d338f93a5e3e1c3b28",
+      "tag": "sources/2026-10-18/asahi/dcp-clusterfuck",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "display-dcp-power-cycle-imacs-m3+",
+      "commit": "0de0fef9f06dab633bfbdb16c7aaa06e92cce847",
+      "tag": "sources/2026-10-18/asahi/display-dcp-power-cycle-imacs-m3+",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "isp/heap-alloc",
+      "commit": "bd59007f50e037d4e0ad579d4b2d2fce86117344",
+      "tag": "sources/2026-10-18/asahi/isp/heap-alloc",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "isp/t602x",
+      "commit": "2a284d694f451ff5c24ad3433c6008d8f58b8ec4",
+      "tag": "sources/2026-10-18/asahi/isp/t602x",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "isp/t602x-b",
+      "commit": "db379acf49787affe761311d4c4c3cc906326bbd",
+      "tag": "sources/2026-10-18/asahi/isp/t602x-b",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "kboot-fw",
+      "commit": "7e5b734ae765a6e27edbb0ee200e0ecde60e8183",
+      "tag": "sources/2026-10-18/asahi/kboot-fw",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "lina/gpu-wip",
+      "commit": "11163540ee025d996f4adf45a40b91d6290ec605",
+      "tag": "sources/2026-10-18/asahi/lina/gpu-wip",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "lina/omg-it-works",
+      "commit": "2824478dfec20a8a5f2231693d2820647d571803",
+      "tag": "sources/2026-10-18/asahi/lina/omg-it-works",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "main",
+      "commit": "25b1d89ca50be848b136ce771ce7167244852a91",
+      "tag": "sources/2026-10-18/asahi/main",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "psci-via-efi",
+      "commit": "d30913b713a4c0e86935f8a9919ec099d495929b",
+      "tag": "sources/2026-10-18/asahi/psci-via-efi",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "releases/1.5.1",
+      "commit": "e266c09ee50971828c6a7ba02bb7f36a24a7692e",
+      "tag": "sources/2026-10-18/asahi/releases/1.5.1",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "rust-1.99-bug-workaround",
+      "commit": "175f1a9ddf4a9e2e312f08ad6cd0162f0b418341",
+      "tag": "sources/2026-10-18/asahi/rust-1.99-bug-workaround",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "sptm-amcc-irq",
+      "commit": "1a2a4a156abf4a15df9af2e7946ce53eb5e3fd11",
+      "tag": "sources/2026-10-18/asahi/sptm-amcc-irq",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "branch",
+      "name": "t602x/bringup",
+      "commit": "44e70e2f3e93c02e0fc977467f0befa8e8ba6e8b",
+      "tag": "sources/2026-10-18/asahi/t602x/bringup",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "732",
+      "commit": "1a2a4a156abf4a15df9af2e7946ce53eb5e3fd11",
+      "tag": "sources/2026-10-18/asahi/pr-732",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "731",
+      "commit": "072be4a0556d3af1c1a08e209aa2d65758c9ba5d",
+      "tag": "sources/2026-10-18/asahi/pr-731",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "730",
+      "commit": "cb0d38265f6a39994a257140f6d262cb83eb3d0b",
+      "tag": "sources/2026-10-18/asahi/pr-730",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "729",
+      "commit": "77f51d5502eb0383b2b196641135047bf2265db8",
+      "tag": "sources/2026-10-18/asahi/pr-729",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "728",
+      "commit": "9211f6a93f17642c263d24e06b27559a5caf4337",
+      "tag": "sources/2026-10-18/asahi/pr-728",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "726",
+      "commit": "f75a06315cfec8ef18f4c49a3bee076812223a38",
+      "tag": "sources/2026-10-18/asahi/pr-726",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "725",
+      "commit": "c660ccfcf4f44b80d0928e2b00645b0bf02f6a80",
+      "tag": "sources/2026-10-18/asahi/pr-725",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "724",
+      "commit": "b9164c502d037da67c0f5168643de5c035d88d12",
+      "tag": "sources/2026-10-18/asahi/pr-724",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "723",
+      "commit": "83744a46bea413e93d09f3c3cbc67661524547a3",
+      "tag": "sources/2026-10-18/asahi/pr-723",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "722",
+      "commit": "d50dea29418831f910988cb73795f457b109ca61",
+      "tag": "sources/2026-10-18/asahi/pr-722",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "720",
+      "commit": "902e73de6a1072a989501c22aeb0917756b36397",
+      "tag": "sources/2026-10-18/asahi/pr-720",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "719",
+      "commit": "ea92e0f782157f78f339babf184e09b40fddf4f1",
+      "tag": "sources/2026-10-18/asahi/pr-719",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "718",
+      "commit": "dd5fa2fb42369c2d0ae578cd13157e694feab287",
+      "tag": "sources/2026-10-18/asahi/pr-718",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "717",
+      "commit": "5621b4b44c72f780b70962f758808e9c4d3d96d6",
+      "tag": "sources/2026-10-18/asahi/pr-717",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "716",
+      "commit": "6bef7744ba9aa809d2f39daecbde2c90e3a8cb16",
+      "tag": "sources/2026-10-18/asahi/pr-716",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "715",
+      "commit": "e65bc53eb500142006ed7ca6d298effa3726c889",
+      "tag": "sources/2026-10-18/asahi/pr-715",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "714",
+      "commit": "01ca10bd080bec8ceb23f2b27f2ea16dfb8c963c",
+      "tag": "sources/2026-10-18/asahi/pr-714",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "713",
+      "commit": "0aadfd3d45faa56d62b0f3545a82f323abe49e1d",
+      "tag": "sources/2026-10-18/asahi/pr-713",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "712",
+      "commit": "ef607a1801f142dd88b8561cece8374ce864bd19",
+      "tag": "sources/2026-10-18/asahi/pr-712",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "711",
+      "commit": "3c34fdc6259b669d53582420b066b00f228e55d0",
+      "tag": "sources/2026-10-18/asahi/pr-711",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "710",
+      "commit": "8118e11c82a69d4b858a29fd5d26ca08f3e38efc",
+      "tag": "sources/2026-10-18/asahi/pr-710",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "709",
+      "commit": "4b88ddc2adaab1ba5d8a0cc35c7b1ee75a590f28",
+      "tag": "sources/2026-10-18/asahi/pr-709",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "708",
+      "commit": "2d3a986d2d6054cf3d94412ec5dac52e98e275fd",
+      "tag": "sources/2026-10-18/asahi/pr-708",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "707",
+      "commit": "b457c0cb82627449823004ff670680179b225804",
+      "tag": "sources/2026-10-18/asahi/pr-707",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "704",
+      "commit": "0de0fef9f06dab633bfbdb16c7aaa06e92cce847",
+      "tag": "sources/2026-10-18/asahi/pr-704",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "703",
+      "commit": "175f1a9ddf4a9e2e312f08ad6cd0162f0b418341",
+      "tag": "sources/2026-10-18/asahi/pr-703",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "702",
+      "commit": "175f1a9ddf4a9e2e312f08ad6cd0162f0b418341",
+      "tag": "sources/2026-10-18/asahi/pr-702",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "701",
+      "commit": "216b93d7b9f97ac2d973b3d61011bf5ec9c97c32",
+      "tag": "sources/2026-10-18/asahi/pr-701",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "700",
+      "commit": "cc1950cc94daf85be6a92623965524905fe0c674",
+      "tag": "sources/2026-10-18/asahi/pr-700",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "699",
+      "commit": "96caebe2962f69bb3765e5adc2006d209c3428e9",
+      "tag": "sources/2026-10-18/asahi/pr-699",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "698",
+      "commit": "b28f41e7668cbd2fd4ca86cf98a00d38eba745c0",
+      "tag": "sources/2026-10-18/asahi/pr-698",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "697",
+      "commit": "aea0d75c86bf8ef6043c9bf3bbcf69eced760331",
+      "tag": "sources/2026-10-18/asahi/pr-697",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "696",
+      "commit": "5c30bf27ba8f150708b95ce4ab317da74709ad28",
+      "tag": "sources/2026-10-18/asahi/pr-696",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "695",
+      "commit": "281b0175e712bd3e0f82fe4c9c0a1f403c78b03a",
+      "tag": "sources/2026-10-18/asahi/pr-695",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "694",
+      "commit": "2eb763f5910d6d8cca90a74498abf62521b70ff7",
+      "tag": "sources/2026-10-18/asahi/pr-694",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "693",
+      "commit": "b18c5ba739c1ed64db210d209a1eb1931a8dc89a",
+      "tag": "sources/2026-10-18/asahi/pr-693",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "692",
+      "commit": "2b7e0cd52d7a972de8aca92558349f7e48264901",
+      "tag": "sources/2026-10-18/asahi/pr-692",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "691",
+      "commit": "df8d1be8312995b5df67da9309cb239681d5dd9b",
+      "tag": "sources/2026-10-18/asahi/pr-691",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "690",
+      "commit": "8386f6452f54e0b7cc06f4353d72d28cd3282c01",
+      "tag": "sources/2026-10-18/asahi/pr-690",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "689",
+      "commit": "95ada4cb6df8cf0615ccd67378823e89a59b1dc1",
+      "tag": "sources/2026-10-18/asahi/pr-689",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "688",
+      "commit": "7b91db8c91cf749a4962ef0a78f5246aaeae90b8",
+      "tag": "sources/2026-10-18/asahi/pr-688",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "687",
+      "commit": "50be93e144b8b026350f05aff35bedfd2d0ceb8e",
+      "tag": "sources/2026-10-18/asahi/pr-687",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "686",
+      "commit": "0e3b146cf2cfb10a684625af918531de536b3311",
+      "tag": "sources/2026-10-18/asahi/pr-686",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "685",
+      "commit": "cf39f6b3a04433dffd0e5f3378fa34629130d5d7",
+      "tag": "sources/2026-10-18/asahi/pr-685",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "684",
+      "commit": "7c5ee476826b06041aecdeaaaaaaa91059e4692d",
+      "tag": "sources/2026-10-18/asahi/pr-684",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "682",
+      "commit": "c9f4683f3f0759b05feeb0f312e2cb54e1a34837",
+      "tag": "sources/2026-10-18/asahi/pr-682",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "681",
+      "commit": "c0509e281c2ebf09e15a14c0dfdadec54a5690cd",
+      "tag": "sources/2026-10-18/asahi/pr-681",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "680",
+      "commit": "6fa10d5524c76589062b615e2a4f59c860dd9515",
+      "tag": "sources/2026-10-18/asahi/pr-680",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "679",
+      "commit": "06dfe45303398592dbfe01c3fb5ea364c3c11c19",
+      "tag": "sources/2026-10-18/asahi/pr-679",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "678",
+      "commit": "b4d64d2d8ac7f8b8b1adf94dd1c72b655f55b912",
+      "tag": "sources/2026-10-18/asahi/pr-678",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "677",
+      "commit": "73c45f71c761585b295e13e12122ab2ebb6ddaa1",
+      "tag": "sources/2026-10-18/asahi/pr-677",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "676",
+      "commit": "26aebccefc3976cfae34610e96ff48b41146c092",
+      "tag": "sources/2026-10-18/asahi/pr-676",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "675",
+      "commit": "4481a488076c549e6156efed12e19992d95a7934",
+      "tag": "sources/2026-10-18/asahi/pr-675",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "674",
+      "commit": "9244c59f060b5fe7f0799cfa153d578438904f74",
+      "tag": "sources/2026-10-18/asahi/pr-674",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/AsahiLinux/m1n1",
+      "kind": "pull-request",
+      "name": "673",
+      "commit": "932382af40d7ef1da344e0d05b2655bfdc5046e5",
+      "tag": "sources/2026-10-18/asahi/pr-673",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "aurora-wip",
+      "commit": "97820568035b8d7035c68e4126f203d86c76abe4",
+      "tag": "sources/2026-10-18/aurora/aurora-wip",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "aurora-wip-dcpext-handoff",
+      "commit": "c7b545d062a58f70508b54f91ed93ed4ef08d015",
+      "tag": "sources/2026-10-18/aurora/aurora-wip-dcpext-handoff",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "j514s/bringup",
+      "commit": "11a571b6ccd1ebb913fff18ab9bff138a65318ac",
+      "tag": "sources/2026-10-18/aurora/j514s/bringup",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "j613/stage1-25g83-logo",
+      "commit": "328a7ee2593b83da8e34eaec9d666e086e6a389b",
+      "tag": "sources/2026-10-18/aurora/j613/stage1-25g83-logo",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "j613/stage1-25g83",
+      "commit": "9848cd81b566e4bdc2737fb3d7fd21054358c62d",
+      "tag": "sources/2026-10-18/aurora/j613/stage1-25g83",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "j616s",
+      "commit": "9be380c8a5a94609fdbe62d693c7b2121478ad8f",
+      "tag": "sources/2026-10-18/aurora/j616s",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "j700",
+      "commit": "7092e6264251cae0342b335ace2e6dc04eb3876c",
+      "tag": "sources/2026-10-18/aurora/j700",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "j873",
+      "commit": "e8a1720b61b8f2fdcd51ea95897cd98fb5d93297",
+      "tag": "sources/2026-10-18/aurora/j873",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "main",
+      "commit": "559fbd1e18f43c9d64022c51ddf47e9a1900af64",
+      "tag": "sources/2026-10-18/aurora/main",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "satchlj/j613-stage1",
+      "commit": "a7f0b4583150f6568bb568c0da8d8ff4a6f71f63",
+      "tag": "sources/2026-10-18/aurora/satchlj/j613-stage1",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "satchlj/sep-alias-copy",
+      "commit": "bf03d2b0d13be080c840263debb528dcc10563d5",
+      "tag": "sources/2026-10-18/aurora/satchlj/sep-alias-copy",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "satchlj/t8122-dcp-reserve",
+      "commit": "d0dc7541541de93897ca39f65a3d314c87e3a621",
+      "tag": "sources/2026-10-18/aurora/satchlj/t8122-dcp-reserve",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "satchlj/t8140-payload-boost",
+      "commit": "aed999725398c75ca0ef7bdc01b0343a7acf2a47",
+      "tag": "sources/2026-10-18/aurora/satchlj/t8140-payload-boost",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "branch",
+      "name": "test/t8140-external-integrated",
+      "commit": "6f521ee29598f1c0d5f94e161db05127b4a929cd",
+      "tag": "sources/2026-10-18/aurora/test/t8140-external-integrated",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "34",
+      "commit": "11a571b6ccd1ebb913fff18ab9bff138a65318ac",
+      "tag": "sources/2026-10-18/aurora/pr-34",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "33",
+      "commit": "9b4dcc65874e3aa64898a375d1e3f453f03b6aee",
+      "tag": "sources/2026-10-18/aurora/pr-33",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "32",
+      "commit": "44d77a8367f571e3ea13599d0cde0dc179caccfa",
+      "tag": "sources/2026-10-18/aurora/pr-32",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "31",
+      "commit": "9848cd81b566e4bdc2737fb3d7fd21054358c62d",
+      "tag": "sources/2026-10-18/aurora/pr-31",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "30",
+      "commit": "6f521ee29598f1c0d5f94e161db05127b4a929cd",
+      "tag": "sources/2026-10-18/aurora/pr-30",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "29",
+      "commit": "4351a0055924216c6edbb908d672d4a3f97eb87d",
+      "tag": "sources/2026-10-18/aurora/pr-29",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "28",
+      "commit": "559fbd1e18f43c9d64022c51ddf47e9a1900af64",
+      "tag": "sources/2026-10-18/aurora/pr-28",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "27",
+      "commit": "792c226fb3173655250877a4499cd4ac462d0a8b",
+      "tag": "sources/2026-10-18/aurora/pr-27",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "26",
+      "commit": "c7b545d062a58f70508b54f91ed93ed4ef08d015",
+      "tag": "sources/2026-10-18/aurora/pr-26",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "25",
+      "commit": "feebeb35f3abe7ff2642bf989b185fd47e3d32f8",
+      "tag": "sources/2026-10-18/aurora/pr-25",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "24",
+      "commit": "8676d2a0c7580f72d3732dae356d799d6b09c8f4",
+      "tag": "sources/2026-10-18/aurora/pr-24",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "23",
+      "commit": "d6bd1c4a8732223e414fbdeff3127cb0f3de0612",
+      "tag": "sources/2026-10-18/aurora/pr-23",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "22",
+      "commit": "5cff66a2d45ed245a3d78f69105b364b1246f5ac",
+      "tag": "sources/2026-10-18/aurora/pr-22",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "21",
+      "commit": "8fa9954b871380fbcf7833561664ba5a3e9e9ade",
+      "tag": "sources/2026-10-18/aurora/pr-21",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "20",
+      "commit": "9be380c8a5a94609fdbe62d693c7b2121478ad8f",
+      "tag": "sources/2026-10-18/aurora/pr-20",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "19",
+      "commit": "6980b5911975227aa55b829a54fc1558d60303a8",
+      "tag": "sources/2026-10-18/aurora/pr-19",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "18",
+      "commit": "64b8edd4e7f0dffc89cf55f53e69410ea71510ec",
+      "tag": "sources/2026-10-18/aurora/pr-18",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "17",
+      "commit": "6c3fdd4bae007f57b3bd210d6ca9ea5aa71fda43",
+      "tag": "sources/2026-10-18/aurora/pr-17",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "16",
+      "commit": "719d7230bef8bf6c5a1bb517674241622d899072",
+      "tag": "sources/2026-10-18/aurora/pr-16",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "15",
+      "commit": "9331fd18f93dc6d680804a07923b3a3ec55846b8",
+      "tag": "sources/2026-10-18/aurora/pr-15",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "14",
+      "commit": "8d5af8d86cc3930ae59ba159dcaaeac6589cb622",
+      "tag": "sources/2026-10-18/aurora/pr-14",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "13",
+      "commit": "7be3df9181acffa57907dc0f290fd7f0cd9a8906",
+      "tag": "sources/2026-10-18/aurora/pr-13",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "12",
+      "commit": "ab292d534f40d4a6477f1370a0752a248b053fa4",
+      "tag": "sources/2026-10-18/aurora/pr-12",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "11",
+      "commit": "cef73131cd32eface2c5d3615e0c0dfed8a2e401",
+      "tag": "sources/2026-10-18/aurora/pr-11",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "10",
+      "commit": "014cadf60e2c8ba3c4120ee5cec8d1eae91647ba",
+      "tag": "sources/2026-10-18/aurora/pr-10",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "9",
+      "commit": "f9e58954c8d1ecca56168de73cb8f3ac513b77b4",
+      "tag": "sources/2026-10-18/aurora/pr-9",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "8",
+      "commit": "d164affb7c5fb205998e54d5568df862b6f053fc",
+      "tag": "sources/2026-10-18/aurora/pr-8",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "7",
+      "commit": "aed999725398c75ca0ef7bdc01b0343a7acf2a47",
+      "tag": "sources/2026-10-18/aurora/pr-7",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "6",
+      "commit": "bf03d2b0d13be080c840263debb528dcc10563d5",
+      "tag": "sources/2026-10-18/aurora/pr-6",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "5",
+      "commit": "d0dc7541541de93897ca39f65a3d314c87e3a621",
+      "tag": "sources/2026-10-18/aurora/pr-5",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "4",
+      "commit": "d1d05d4eaf952bf1d0a25fe0ab48985727367bab",
+      "tag": "sources/2026-10-18/aurora/pr-4",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "3",
+      "commit": "c6498e6e1a26bbe7d02e71d1225d36089e1ac6a0",
+      "tag": "sources/2026-10-18/aurora/pr-3",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "2",
+      "commit": "a5f49f9eff3a37b751ff135db358eec73f2aa368",
+      "tag": "sources/2026-10-18/aurora/pr-2",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/aurora-silicon/m1n1",
+      "kind": "pull-request",
+      "name": "1",
+      "commit": "71174025df459f753d3a2d066ccab01b5a0d1a36",
+      "tag": "sources/2026-10-18/aurora/pr-1",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "branch",
+      "name": "integration/aurora",
+      "commit": "d05ba17dfb771871d608225be42968bbb1e75a18",
+      "tag": "sources/2026-10-18/omacom/integration/aurora",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "branch",
+      "name": "integration/neo",
+      "commit": "1b36287e04788f4a028e6180c64d3d96e49f06b1",
+      "tag": "sources/2026-10-18/omacom/integration/neo",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "branch",
+      "name": "j873",
+      "commit": "ff7a0cda72a351d4ea5f20d31061f5a4972c6b1a",
+      "tag": "sources/2026-10-18/omacom/j873",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "branch",
+      "name": "main",
+      "commit": "b4654b32941d51afdb77579d63e7cb1aa6c03ecc",
+      "tag": "sources/2026-10-18/omacom/main",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "branch",
+      "name": "max/t6031-handoff-20261011",
+      "commit": "a2b3a4ad018c12b83980f052e51a1560855fa15f",
+      "tag": "sources/2026-10-18/omacom/max/t6031-handoff-20261011",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "pull-request",
+      "name": "4",
+      "commit": "bd5a2348806923e4139bc300f05b8df887bc06d3",
+      "tag": "sources/2026-10-18/omacom/pr-4",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "pull-request",
+      "name": "3",
+      "commit": "b10c179c9cbd274af1ab6512f1e6a918272d3dc7",
+      "tag": "sources/2026-10-18/omacom/pr-3",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "pull-request",
+      "name": "2",
+      "commit": "71174025df459f753d3a2d066ccab01b5a0d1a36",
+      "tag": "sources/2026-10-18/omacom/pr-2",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/omacom/m1n1",
+      "kind": "pull-request",
+      "name": "1",
+      "commit": "c6498e6e1a26bbe7d02e71d1225d36089e1ac6a0",
+      "tag": "sources/2026-10-18/omacom/pr-1",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "atcphy-new-tunables",
+      "commit": "9657a52e9183d09563fb57396fb36342d7b263d1",
+      "tag": "sources/2026-10-18/dj/atcphy-new-tunables",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "chickens",
+      "commit": "4bf21ac48c16c1dd0fd7d7cd318371af632517f4",
+      "tag": "sources/2026-10-18/dj/chickens",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "darwin",
+      "commit": "e19e74be8b7d5f3643cbb4237ee6b8ba2a7d8578",
+      "tag": "sources/2026-10-18/dj/darwin",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "dcp/m2pro-iboot-lightup",
+      "commit": "cc7acfb65c303396def1d4552ffb57c6ab09ec63",
+      "tag": "sources/2026-10-18/dj/dcp/m2pro-iboot-lightup",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "dcp-clusterfuck",
+      "commit": "3f6e1fe028226cd77b7bd9d338f93a5e3e1c3b28",
+      "tag": "sources/2026-10-18/dj/dcp-clusterfuck",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "dockchannel-hacks",
+      "commit": "b2e7921624421f01a9b4db5dabc35423067d91f4",
+      "tag": "sources/2026-10-18/dj/dockchannel-hacks",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "feature/bcm4388-sid1-handoff",
+      "commit": "b661647696191a177ea15ea1a9d5f69ae422c31d",
+      "tag": "sources/2026-10-18/dj/feature/bcm4388-sid1-handoff",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "feature/j414s-gpu-handoff-runtime",
+      "commit": "47520d600650b0b437935fe6e6c6520154a08953",
+      "tag": "sources/2026-10-18/dj/feature/j414s-gpu-handoff-runtime",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "feature/j414s-wireless-probe-v2",
+      "commit": "51deb581406ae51c077cd75a520576650bfae209",
+      "tag": "sources/2026-10-18/dj/feature/j414s-wireless-probe-v2",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "feature/typec-orientation",
+      "commit": "2982c10a7bded4e26660bcc22a087e531699f961",
+      "tag": "sources/2026-10-18/dj/feature/typec-orientation",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "isp/heap-alloc",
+      "commit": "bd59007f50e037d4e0ad579d4b2d2fce86117344",
+      "tag": "sources/2026-10-18/dj/isp/heap-alloc",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "isp/t602x",
+      "commit": "2a284d694f451ff5c24ad3433c6008d8f58b8ec4",
+      "tag": "sources/2026-10-18/dj/isp/t602x",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "isp/t602x-b",
+      "commit": "db379acf49787affe761311d4c4c3cc906326bbd",
+      "tag": "sources/2026-10-18/dj/isp/t602x-b",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "kboot-fw",
+      "commit": "7e5b734ae765a6e27edbb0ee200e0ecde60e8183",
+      "tag": "sources/2026-10-18/dj/kboot-fw",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "lina/gpu-wip",
+      "commit": "11163540ee025d996f4adf45a40b91d6290ec605",
+      "tag": "sources/2026-10-18/dj/lina/gpu-wip",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "lina/omg-it-works",
+      "commit": "2824478dfec20a8a5f2231693d2820647d571803",
+      "tag": "sources/2026-10-18/dj/lina/omg-it-works",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "m5-t6050-atcphy-display",
+      "commit": "26bc1ad0b28e503b88f82721025b05d500f01a3a",
+      "tag": "sources/2026-10-18/dj/m5-t6050-atcphy-display",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "m5-t6050-rfc",
+      "commit": "422a6b65de37a0e34d34ed9b5fd588ecf446267c",
+      "tag": "sources/2026-10-18/dj/m5-t6050-rfc",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "main",
+      "commit": "7c7716b6a196c7e601f9f22bb8af335c1b8173ce",
+      "tag": "sources/2026-10-18/dj/main",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "perf/hv-trap-reduction",
+      "commit": "d67843d9deaba4b299a3d7402ea507951aeb7336",
+      "tag": "sources/2026-10-18/dj/perf/hv-trap-reduction",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "psci-via-efi",
+      "commit": "d30913b713a4c0e86935f8a9919ec099d495929b",
+      "tag": "sources/2026-10-18/dj/psci-via-efi",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "releases/1.5.1",
+      "commit": "e266c09ee50971828c6a7ba02bb7f36a24a7692e",
+      "tag": "sources/2026-10-18/dj/releases/1.5.1",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "research/native-el2",
+      "commit": "5bf811302301ce0664cf071f54512cd4c21b5f84",
+      "tag": "sources/2026-10-18/dj/research/native-el2",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "t602x/bringup",
+      "commit": "44e70e2f3e93c02e0fc977467f0befa8e8ba6e8b",
+      "tag": "sources/2026-10-18/dj/t602x/bringup",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "tbt",
+      "commit": "3e781e2d2582c0c05d70a243d5fb40ad9e253d81",
+      "tag": "sources/2026-10-18/dj/tbt",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/DjDeveloperr/m1n1",
+      "kind": "branch",
+      "name": "wip/j414s-media-profile",
+      "commit": "0f821c440b01e6b8048ec358bcacfc7674e056a6",
+      "tag": "sources/2026-10-18/dj/wip/j414s-media-profile",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/dcuart-channel-config",
+      "commit": "c1956d54ba686392392339767e02dc31025dbfda",
+      "tag": "sources/2026-10-18/yureka/feature/dcuart-channel-config",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/fix-wfi-condition",
+      "commit": "95ada4cb6df8cf0615ccd67378823e89a59b1dc1",
+      "tag": "sources/2026-10-18/yureka/feature/fix-wfi-condition",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/foreach-hpm",
+      "commit": "9f4595865b51d08f68e0b65c0456b3668e315f0a",
+      "tag": "sources/2026-10-18/yureka/feature/foreach-hpm",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/mcc-t8132",
+      "commit": "9694d9f929938a95e498d1cde6f669ed1a290eef",
+      "tag": "sources/2026-10-18/yureka/feature/mcc-t8132",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/more-mcc",
+      "commit": "4aef00368a1a7b27be36385f00bb37005b5fee6b",
+      "tag": "sources/2026-10-18/yureka/feature/more-mcc",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/nvme-m4",
+      "commit": "ef12a51f77aaa376902fa3696fe67e038689e3d4",
+      "tag": "sources/2026-10-18/yureka/feature/nvme-m4",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/nvme-regs",
+      "commit": "4481a488076c549e6156efed12e19992d95a7934",
+      "tag": "sources/2026-10-18/yureka/feature/nvme-regs",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/sart-merge",
+      "commit": "99affe5526af1865116ba7fbebc66736df698f35",
+      "tag": "sources/2026-10-18/yureka/feature/sart-merge",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/t6000-dcs-stride",
+      "commit": "f6d56ead6ac01cbfccae6963fdc23ea619e843c1",
+      "tag": "sources/2026-10-18/yureka/feature/t6000-dcs-stride",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/t8132-atc",
+      "commit": "9247fa3bff97d2caad6845ba85ae4f0e820c745a",
+      "tag": "sources/2026-10-18/yureka/feature/t8132-atc",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/t8140-atc",
+      "commit": "cb6391b8e3a6100ff5d0e6cb2da47d7c3de32247",
+      "tag": "sources/2026-10-18/yureka/feature/t8140-atc",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "feature/untested-t8142-pcie",
+      "commit": "b7e4b28ccee998aba3856303a2d26554a566aaec",
+      "tag": "sources/2026-10-18/yureka/feature/untested-t8142-pcie",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "find-regs-smp",
+      "commit": "781752e775e1bb530e3989de7abe425d6555bd85",
+      "tag": "sources/2026-10-18/yureka/find-regs-smp",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "main",
+      "commit": "d0405f0b69d801cebafdf99752d2326081475b32",
+      "tag": "sources/2026-10-18/yureka/main",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "nvme-cwd12",
+      "commit": "be2637d8ccfa2b46896ca16b904f966dd95b8e00",
+      "tag": "sources/2026-10-18/yureka/nvme-cwd12",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "pstate-latencies-boot-cpu",
+      "commit": "112740b2a990a30aac76191d76fc39a043e41360",
+      "tag": "sources/2026-10-18/yureka/pstate-latencies-boot-cpu",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "smp-debug",
+      "commit": "60cbe066dc7c82b855bf98e3f916f192983c46e3",
+      "tag": "sources/2026-10-18/yureka/smp-debug",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "switch_boot_cpu",
+      "commit": "76acf6fe3c52458821f58f13bbf68afdf1d0841a",
+      "tag": "sources/2026-10-18/yureka/switch_boot_cpu",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "t8140-pcie",
+      "commit": "a7857af8bb6aabe67a6fef1e211e7d0c7eea8d71",
+      "tag": "sources/2026-10-18/yureka/t8140-pcie",
+      "disposition": "snapshot; see review before integrating"
+    },
+    {
+      "repository": "https://github.com/yuyuyureka/m1n1",
+      "kind": "branch",
+      "name": "tps6598x-spmi",
+      "commit": "14456e3f90133d5640e43fa41a791f54d1476a50",
+      "tag": "sources/2026-10-18/yureka/tps6598x-spmi",
+      "disposition": "snapshot; see review before integrating"
+    }
+  ],
+  "pull_requests": [
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/732",
+      "title": "hv: Hide weird AMCC interrupts from the guest",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "1a2a4a156abf4a15df9af2e7946ce53eb5e3fd11"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/731",
+      "title": "hv: Prevent writes to some dangeours CPU power controls",
+      "state": "closed",
+      "merged_at": "2026-10-18T15:49:57Z",
+      "head_commit": "072be4a0556d3af1c1a08e209aa2d65758c9ba5d"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/730",
+      "title": "proxyclient/hv: Virtualize AMCC to make SPTM happy",
+      "state": "closed",
+      "merged_at": "2026-10-18T14:45:03Z",
+      "head_commit": "cb0d38265f6a39994a257140f6d262cb83eb3d0b"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/729",
+      "title": "hv: Steal RAM for the SPRR shadow pagetables from the top of RAM",
+      "state": "closed",
+      "merged_at": "2026-10-18T12:59:12Z",
+      "head_commit": "77f51d5502eb0383b2b196641135047bf2265db8"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/728",
+      "title": "hv: sprr: Emulate unknown TLBI instructions",
+      "state": "closed",
+      "merged_at": "2026-10-18T12:58:58Z",
+      "head_commit": "9211f6a93f17642c263d24e06b27559a5caf4337"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/726",
+      "title": "proxycleint/run_guest: Make sure --sptm-mode is used together with --\u2026",
+      "state": "closed",
+      "merged_at": "2026-10-17T15:56:46Z",
+      "head_commit": "f75a06315cfec8ef18f4c49a3bee076812223a38"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/725",
+      "title": "hv: Merge SPTM and SPRR HV",
+      "state": "closed",
+      "merged_at": "2026-10-17T13:54:20Z",
+      "head_commit": "c660ccfcf4f44b80d0928e2b00645b0bf02f6a80"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/724",
+      "title": "hv: sprr: Apply PAC override after guest SCTLR write",
+      "state": "closed",
+      "merged_at": "2026-10-17T11:06:44Z",
+      "head_commit": "b9164c502d037da67c0f5168643de5c035d88d12"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/723",
+      "title": "t8132 nvme simplification and tracing",
+      "state": "closed",
+      "merged_at": "2026-10-18T10:45:58Z",
+      "head_commit": "83744a46bea413e93d09f3c3cbc67661524547a3"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/722",
+      "title": "hv: sprr: Drop a bunch of debug logging",
+      "state": "closed",
+      "merged_at": "2026-10-17T09:57:57Z",
+      "head_commit": "d50dea29418831f910988cb73795f457b109ca61"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/720",
+      "title": "hv: Correctly emulate APCTL / PAC",
+      "state": "closed",
+      "merged_at": "2026-10-17T09:57:56Z",
+      "head_commit": "902e73de6a1072a989501c22aeb0917756b36397"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/719",
+      "title": "proxyclient/tools: Fix broken chainloading script",
+      "state": "closed",
+      "merged_at": "2026-10-16T17:38:00Z",
+      "head_commit": "ea92e0f782157f78f339babf184e09b40fddf4f1"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/718",
+      "title": "Sptm m4 loader fixes",
+      "state": "closed",
+      "merged_at": "2026-10-17T09:46:20Z",
+      "head_commit": "dd5fa2fb42369c2d0ae578cd13157e694feab287"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/717",
+      "title": "hv: Optionally trap GENTER to the Python shell",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "5621b4b44c72f780b70962f758808e9c4d3d96d6"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/716",
+      "title": "proxyclient/hv: Patch XNU, SPTM and TXM when SPRR/GXF emulation is used",
+      "state": "closed",
+      "merged_at": "2026-10-15T20:16:38Z",
+      "head_commit": "6bef7744ba9aa809d2f39daecbde2c90e3a8cb16"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/715",
+      "title": "Correctly emulate GXF and prevent userspace from using it",
+      "state": "closed",
+      "merged_at": "2026-10-17T09:46:58Z",
+      "head_commit": "e65bc53eb500142006ed7ca6d298effa3726c889"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/714",
+      "title": "Buffered trace mode for more efficient IOCTL tracing",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "01ca10bd080bec8ceb23f2b27f2ea16dfb8c963c"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/713",
+      "title": "SPTM: Emulate Apple's 24 MHz timer",
+      "state": "closed",
+      "merged_at": "2026-10-13T19:59:45Z",
+      "head_commit": "0aadfd3d45faa56d62b0f3545a82f323abe49e1d"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/712",
+      "title": "hv: Allow 64-bit CPU state register accesses",
+      "state": "closed",
+      "merged_at": "2026-10-13T15:30:35Z",
+      "head_commit": "ef607a1801f142dd88b8561cece8374ce864bd19"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/711",
+      "title": "utils: Assemble msr/mrs with armv9.4-a",
+      "state": "closed",
+      "merged_at": "2026-10-12T18:52:27Z",
+      "head_commit": "3c34fdc6259b669d53582420b066b00f228e55d0"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/710",
+      "title": "test",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "8118e11c82a69d4b858a29fd5d26ca08f3e38efc"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/709",
+      "title": "Add an enum to select the SPTM HV mode",
+      "state": "closed",
+      "merged_at": "2026-10-13T15:30:04Z",
+      "head_commit": "4b88ddc2adaab1ba5d8a0cc35c7b1ee75a590f28"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/708",
+      "title": "hv: Handle nXS TLBI",
+      "state": "closed",
+      "merged_at": "2026-10-11T16:29:01Z",
+      "head_commit": "2d3a986d2d6054cf3d94412ec5dac52e98e275fd"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/707",
+      "title": "Import Linux' __always/maybe_unused and use it",
+      "state": "closed",
+      "merged_at": "2026-10-11T16:25:49Z",
+      "head_commit": "b457c0cb82627449823004ff670680179b225804"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/704",
+      "title": "display: Limit M1/M2 Sequoia DCP power-cycle to M1/M2",
+      "state": "closed",
+      "merged_at": "2026-10-11T09:14:44Z",
+      "head_commit": "0de0fef9f06dab633bfbdb16c7aaa06e92cce847"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/703",
+      "title": "rust: Add workaround for rust 1.99.0 regression.",
+      "state": "closed",
+      "merged_at": "2026-10-10T14:48:31Z",
+      "head_commit": "175f1a9ddf4a9e2e312f08ad6cd0162f0b418341"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/702",
+      "title": "rust: Add workaround for rust 1.99.0 regression.",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "175f1a9ddf4a9e2e312f08ad6cd0162f0b418341"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/701",
+      "title": "CI: rust: Downgrade rust to 1.98.1",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "216b93d7b9f97ac2d973b3d61011bf5ec9c97c32"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/700",
+      "title": "Enable debugusb based on SIP flags",
+      "state": "closed",
+      "merged_at": "2026-10-11T14:41:15Z",
+      "head_commit": "cc1950cc94daf85be6a92623965524905fe0c674"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/699",
+      "title": "m1n1.fw.dcp.ipc: add and fix V14_7 calls",
+      "state": "closed",
+      "merged_at": "2026-10-11T07:49:54Z",
+      "head_commit": "96caebe2962f69bb3765e5adc2006d209c3428e9"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/698",
+      "title": "Add SPTM support to hypervisor",
+      "state": "closed",
+      "merged_at": "2026-10-15T14:29:00Z",
+      "head_commit": "b28f41e7668cbd2fd4ca86cf98a00d38eba745c0"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/697",
+      "title": "main: update boot license message",
+      "state": "closed",
+      "merged_at": "2026-10-04T18:19:29Z",
+      "head_commit": "aea0d75c86bf8ef6043c9bf3bbcf69eced760331"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/696",
+      "title": "Clarify licence situation after relicence",
+      "state": "closed",
+      "merged_at": "2026-10-06T06:49:17Z",
+      "head_commit": "5c30bf27ba8f150708b95ce4ab317da74709ad28"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/695",
+      "title": "SPTM, part 1",
+      "state": "closed",
+      "merged_at": "2026-10-11T13:38:59Z",
+      "head_commit": "281b0175e712bd3e0f82fe4c9c0a1f403c78b03a"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/694",
+      "title": "rust: drop spurious space in Cargo.toml",
+      "state": "closed",
+      "merged_at": "2026-10-10T10:49:12Z",
+      "head_commit": "2eb763f5910d6d8cca90a74498abf62521b70ff7"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/693",
+      "title": "Fix rust warnings",
+      "state": "closed",
+      "merged_at": "2026-09-30T12:10:26Z",
+      "head_commit": "b18c5ba739c1ed64db210d209a1eb1931a8dc89a"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/692",
+      "title": "kboot: Fix M4* boot under hypervisor",
+      "state": "closed",
+      "merged_at": "2026-09-30T09:50:32Z",
+      "head_commit": "2b7e0cd52d7a972de8aca92558349f7e48264901"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/691",
+      "title": "firmware: Add newer macOS / mBoot versions",
+      "state": "closed",
+      "merged_at": "2026-09-30T17:29:47Z",
+      "head_commit": "df8d1be8312995b5df67da9309cb239681d5dd9b"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/690",
+      "title": "display: Skip configuration with unsupported OS firmware",
+      "state": "closed",
+      "merged_at": "2026-10-02T07:45:07Z",
+      "head_commit": "8386f6452f54e0b7cc06f4353d72d28cd3282c01"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/689",
+      "title": "kboot: fix inverted wfi bootargs condition",
+      "state": "closed",
+      "merged_at": "2026-09-30T08:36:59Z",
+      "head_commit": "95ada4cb6df8cf0615ccd67378823e89a59b1dc1"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/688",
+      "title": "cpu_regs: Add CTRR/CTXR sysregs used by SPTM",
+      "state": "closed",
+      "merged_at": "2026-09-30T09:29:19Z",
+      "head_commit": "7b91db8c91cf749a4962ef0a78f5246aaeae90b8"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/687",
+      "title": "Add M3 ultra support",
+      "state": "closed",
+      "merged_at": "2026-09-29T09:59:04Z",
+      "head_commit": "50be93e144b8b026350f05aff35bedfd2d0ceb8e"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/686",
+      "title": "hv: Move CPU state read hook to C code",
+      "state": "closed",
+      "merged_at": "2026-09-29T09:32:17Z",
+      "head_commit": "0e3b146cf2cfb10a684625af918531de536b3311"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/685",
+      "title": "allow SME in EL1",
+      "state": "closed",
+      "merged_at": "2026-09-28T15:25:51Z",
+      "head_commit": "cf39f6b3a04433dffd0e5f3378fa34629130d5d7"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/684",
+      "title": "proxyclient: Copy more boot blobs in chainload",
+      "state": "closed",
+      "merged_at": "2026-09-28T15:25:37Z",
+      "head_commit": "7c5ee476826b06041aecdeaaaaaaa91059e4692d"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/682",
+      "title": "SMP stack and cache fixes",
+      "state": "closed",
+      "merged_at": "2026-09-27T20:59:37Z",
+      "head_commit": "c9f4683f3f0759b05feeb0f312e2cb54e1a34837"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/681",
+      "title": "hv: Initialize VMPIDR from MPIDR",
+      "state": "closed",
+      "merged_at": "2026-09-27T14:20:19Z",
+      "head_commit": "c0509e281c2ebf09e15a14c0dfdadec54a5690cd"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/680",
+      "title": "Preparations for the M4 HV",
+      "state": "closed",
+      "merged_at": "2026-09-27T12:34:27Z",
+      "head_commit": "6fa10d5524c76589062b615e2a4f59c860dd9515"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/679",
+      "title": "Add basic T8152 (M6) support",
+      "state": "closed",
+      "merged_at": "2026-09-27T10:04:08Z",
+      "head_commit": "06dfe45303398592dbfe01c3fb5ea364c3c11c19"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/678",
+      "title": "kboot: enable dcpext firmware reservation on t8103 (M1)",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "b4d64d2d8ac7f8b8b1adf94dd1c72b655f55b912"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/677",
+      "title": "m1n1.constructutils: Add AGX G15 and G15X versions",
+      "state": "closed",
+      "merged_at": "2026-09-18T10:28:36Z",
+      "head_commit": "73c45f71c761585b295e13e12122ab2ebb6ddaa1"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/676",
+      "title": "tools/pmgr_adt2dt: Change property order",
+      "state": "closed",
+      "merged_at": "2026-09-27T10:05:53Z",
+      "head_commit": "26aebccefc3976cfae34610e96ff48b41146c092"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/675",
+      "title": "hv/trace_nvme: fix DBS reg names",
+      "state": "closed",
+      "merged_at": "2026-09-10T17:40:59Z",
+      "head_commit": "4481a488076c549e6156efed12e19992d95a7934"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/674",
+      "title": "usb: Use USB2PHY constansts from Linux atc driver",
+      "state": "closed",
+      "merged_at": "2026-09-04T09:00:30Z",
+      "head_commit": "9244c59f060b5fe7f0799cfa153d578438904f74"
+    },
+    {
+      "url": "https://github.com/AsahiLinux/m1n1/pull/673",
+      "title": "kboot: Change disp0 piodma alias",
+      "state": "closed",
+      "merged_at": "2026-09-04T09:00:21Z",
+      "head_commit": "932382af40d7ef1da344e0d05b2655bfdc5046e5"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/34",
+      "title": "kboot: J514S (MacBook Pro 14\" M3 Pro) display, external display, HDMI and SIO handoffs",
+      "state": "closed",
+      "merged_at": "2026-10-17T18:38:14Z",
+      "head_commit": "11a571b6ccd1ebb913fff18ab9bff138a65318ac"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/33",
+      "title": "kboot: enable the Type-C display routes of the DCPs m1n1 enables",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "9b4dcc65874e3aa64898a375d1e3f453f03b6aee"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/32",
+      "title": "kboot: validate T8140 display handoff and refusal ownership",
+      "state": "closed",
+      "merged_at": "2026-10-13T11:48:08Z",
+      "head_commit": "44d77a8367f571e3ea13599d0cde0dc179caccfa"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/31",
+      "title": "J613 (and experimental J615) ESP stage 1 for macOS 26.6.2",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "9848cd81b566e4bdc2737fb3d7fd21054358c62d"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/30",
+      "title": "kboot: publish provider tables and remove unused T8140 observers",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "6f521ee29598f1c0d5f94e161db05127b4a929cd"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/29",
+      "title": "kboot: observe bounded T8140 external display metadata",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "4351a0055924216c6edbb908d672d4a3f97eb87d"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/28",
+      "title": "chore: update stable m1n1 from aurora-wip",
+      "state": "closed",
+      "merged_at": "2026-10-12T20:43:01Z",
+      "head_commit": "559fbd1e18f43c9d64022c51ddf47e9a1900af64"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/27",
+      "title": "kboot: Log bounded optional T8140 external preflight metadata",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "792c226fb3173655250877a4499cd4ac462d0a8b"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/26",
+      "title": "HW-PENDING: kboot: hand the T8140 external display coprocessor over",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "c7b545d062a58f70508b54f91ed93ed4ef08d015"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/25",
+      "title": "Address HV, SMP and installation follow-ups from #23",
+      "state": "closed",
+      "merged_at": "2026-10-10T23:18:26Z",
+      "head_commit": "feebeb35f3abe7ff2642bf989b185fd47e3d32f8"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/24",
+      "title": "docs: j700: Describe release testing in public terms",
+      "state": "closed",
+      "merged_at": "2026-10-10T22:01:48Z",
+      "head_commit": "8676d2a0c7580f72d3732dae356d799d6b09c8f4"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/23",
+      "title": "J700 (T8140) support: review cleanup and checked SMP failures",
+      "state": "closed",
+      "merged_at": "2026-10-10T21:20:00Z",
+      "head_commit": "d6bd1c4a8732223e414fbdeff3127cb0f3de0612"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/22",
+      "title": "HW-PENDING: kboot: hand the T8140 external display coprocessor over",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "5cff66a2d45ed245a3d78f69105b364b1246f5ac"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/21",
+      "title": "J700: CDC-primary Stage 1 proxy window",
+      "state": "closed",
+      "merged_at": "2026-10-10T15:39:30Z",
+      "head_commit": "8fa9954b871380fbcf7833561664ba5a3e9e9ade"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/20",
+      "title": "J616s: CPU, IOP and camera/audio proxy bring-up",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "9be380c8a5a94609fdbe62d693c7b2121478ad8f"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/19",
+      "title": "kboot: hand off live T8142 display firmware mappings",
+      "state": "closed",
+      "merged_at": "2026-10-03T04:35:39Z",
+      "head_commit": "6980b5911975227aa55b829a54fc1558d60303a8"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/18",
+      "title": "kboot: add M5 USB3 and USB4 runtime tuning handoff",
+      "state": "closed",
+      "merged_at": "2026-10-03T01:13:25Z",
+      "head_commit": "64b8edd4e7f0dffc89cf55f53e69410ea71510ec"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/17",
+      "title": "display: Enable and retain the normal M6 boot console",
+      "state": "closed",
+      "merged_at": "2026-10-02T20:21:36Z",
+      "head_commit": "6c3fdd4bae007f57b3bd210d6ca9ea5aa71fda43"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/16",
+      "title": "display: add M6 USB-C DisplayPort bring-up",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:06:48Z",
+      "head_commit": "719d7230bef8bf6c5a1bb517674241622d899072"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/15",
+      "title": "cpufreq: add M6 firmware performance requests",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:06:41Z",
+      "head_commit": "9331fd18f93dc6d680804a07923b3a3ec55846b8"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/14",
+      "title": "smp: bring up all twelve M6 T8152 CPUs",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:06:35Z",
+      "head_commit": "8d5af8d86cc3930ae59ba159dcaaeac6589cb622"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/13",
+      "title": "cpufreq: add initial M5 T8142 cluster setup",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:05:21Z",
+      "head_commit": "7be3df9181acffa57907dc0f290fd7f0cd9a8906"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/12",
+      "title": "smp: bring up all ten M5 T8142 cores",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:05:14Z",
+      "head_commit": "ab292d534f40d4a6477f1370a0752a248b053fa4"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/11",
+      "title": "Apple M6: initial J873g KIS proxy bring-up",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:06:29Z",
+      "head_commit": "cef73131cd32eface2c5d3615e0c0dfed8a2e401"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/10",
+      "title": "j813: add initial M5 native Linux boot support",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:04:57Z",
+      "head_commit": "014cadf60e2c8ba3c4120ee5cec8d1eae91647ba"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/9",
+      "title": "kboot: never abort the boot over SEP firmware handoff properties",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "f9e58954c8d1ecca56168de73cb8f3ac513b77b4"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/8",
+      "title": "nvme: read chainload images 64 blocks per command",
+      "state": "closed",
+      "merged_at": "2026-10-02T19:04:51Z",
+      "head_commit": "d164affb7c5fb205998e54d5568df862b6f053fc"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/7",
+      "title": "cpufreq: run the T8140 P cluster at P8 while payloads load",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "aed999725398c75ca0ef7bdc01b0343a7acf2a47"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/6",
+      "title": "kboot: copy the sep alias path before reserving sepfw",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "bf03d2b0d13be080c840263debb528dcc10563d5"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/5",
+      "title": "kboot: reserve the T8122 DCP firmware segments",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "d0dc7541541de93897ca39f65a3d314c87e3a621"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/4",
+      "title": "kboot: fall back to the usb4-N-pcie-adapter alias",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "d1d05d4eaf952bf1d0a25fe0ab48985727367bab"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/3",
+      "title": "sep: preserve iBoot warm registration and forward preboot UUID from ADT",
+      "state": "closed",
+      "merged_at": "2026-09-29T19:05:56Z",
+      "head_commit": "c6498e6e1a26bbe7d02e71d1225d36089e1ac6a0"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/2",
+      "title": "J700 (T8140) support: display, APCIe, ISP, SEP, CDC",
+      "state": "closed",
+      "merged_at": "2026-10-10T21:20:02Z",
+      "head_commit": "a5f49f9eff3a37b751ff135db358eec73f2aa368"
+    },
+    {
+      "url": "https://github.com/aurora-silicon/m1n1/pull/1",
+      "title": "Revise AI usage policy in AGENTS.md, removing anti-ai references.",
+      "state": "closed",
+      "merged_at": "2026-09-28T12:05:09Z",
+      "head_commit": "71174025df459f753d3a2d066ccab01b5a0d1a36"
+    },
+    {
+      "url": "https://github.com/omacom/m1n1/pull/4",
+      "title": "isp: give T8122 an ISP heap on 26.6.2 OS firmware",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "bd5a2348806923e4139bc300f05b8df887bc06d3"
+    },
+    {
+      "url": "https://github.com/omacom/m1n1/pull/3",
+      "title": "Replace the inherited no-AI notice with omacom's policy",
+      "state": "open",
+      "merged_at": null,
+      "head_commit": "b10c179c9cbd274af1ab6512f1e6a918272d3dc7"
+    },
+    {
+      "url": "https://github.com/omacom/m1n1/pull/2",
+      "title": "Revise AI usage policy in AGENTS.md, removing anti-ai references.",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "71174025df459f753d3a2d066ccab01b5a0d1a36"
+    },
+    {
+      "url": "https://github.com/omacom/m1n1/pull/1",
+      "title": "sep: preserve iBoot warm registration on M2 and newer SoCs",
+      "state": "closed",
+      "merged_at": null,
+      "head_commit": "c6498e6e1a26bbe7d02e71d1225d36089e1ac6a0"
+    }
+  ],
+  "profiles": [
+    {
+      "branch": "experimental/neo",
+      "commit": "c57f27f473de3d75266cf4d3f17e02866acd0edb",
+      "source_commit": "1b36287e04788f4a028e6180c64d3d96e49f06b1",
+      "tested": true
+    },
+    {
+      "branch": "experimental/m4",
+      "commit": "3ab0a733ae8d12fc62e6091c3261956670b46697",
+      "source_commit": "9be380c8a5a94609fdbe62d693c7b2121478ad8f",
+      "tested": false
+    },
+    {
+      "branch": "experimental/m5-t6050",
+      "commit": "a5cd88166aa90237466fadc5ea294aa92f91c997",
+      "source_commit": "26bc1ad0b28e503b88f82721025b05d500f01a3a",
+      "tested": false
+    }
+  ],
+  "reviewed_code_commit": "04fe540ef7fa58404145eb28ec40f1af0906d21e",
+  "kernel": {
+    "repository": "https://github.com/iconidentify/siliconforest-linux",
+    "branch": "siliconforest/next",
+    "commit": "6a421d4e76ff282b414138182fd28597ebf20a18",
+    "native_abi_config": "CONFIG_SILICONFOREST_M3=y"
+  },
+  "mesa": {
+    "repository": "https://github.com/iconidentify/siliconforest-mesa",
+    "branch": "siliconforest/next",
+    "commit": "b670e85194845a8c8e7f1dea1807ab82c03563e5"
+  },
+  "scope": "Public-source discovery snapshot. An archived source ref is evidence, not approval or hardware qualification. Private Mesa research remains local.",
+  "upstream_integrated": "25b1d89ca50be848b136ce771ce7167244852a91",
+  "reviewed_source_trees": {
+    "src": "7c1c22fcaa1471cd9e78f2cd07cf5579520908b6",
+    "rust": "b98d7253c030c276fc9627ff2f61b24d35dc754d",
+    "Makefile": "adb9e7b78c2d6429559747047fd44c417ec38db0"
+  },
+  "reviewed_test_tree": "87127fee78b2fd12d4a5ccf3433dd5b8d4ec75a7"
+}

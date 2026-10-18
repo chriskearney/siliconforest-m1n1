@@ -1,0 +1,210 @@
+{
+  "date": "2026-10-18",
+  "code_commit": "04fe540ef7fa58404145eb28ec40f1af0906d21e",
+  "source_trees": {
+    "src": "7c1c22fcaa1471cd9e78f2cd07cf5579520908b6",
+    "rust": "b98d7253c030c276fc9627ff2f61b24d35dc754d",
+    "Makefile": "adb9e7b78c2d6429559747047fd44c417ec38db0"
+  },
+  "toolchains": {
+    "clang": "22.1.8",
+    "rust_main": "1.99.0",
+    "rust_neo": "1.89.0"
+  },
+  "main_stage2": {
+    "built": true,
+    "installed": false,
+    "sha256": "bcf2f8ecb10400acf06163d43c63c0d56a040689534e0e7bd7b24bcb18f32784",
+    "flags": "#define RELEASE\n"
+  },
+  "main_pytest": {
+    "passed": 53,
+    "skipped": 7,
+    "subtests_passed": 10
+  },
+  "host_scripts": [
+    {
+      "name": "run-bootlogo",
+      "command": [
+        "sh",
+        "tests/run-bootlogo.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "bootlogo 48: 9216 bytes -> 1250 compressed, inflates exactly",
+        "bootlogo 128: 65536 bytes -> 2934 compressed, inflates exactly",
+        "bootlogo 256: 262144 bytes -> 5868 compressed, inflates exactly"
+      ]
+    },
+    {
+      "name": "run-kboot-gpu-g15",
+      "command": [
+        "sh",
+        "tests/run-kboot-gpu-g15.sh"
+      ],
+      "exit_code": 1,
+      "tail": [
+        "tests/run-kboot-gpu-g15.sh: line 55: 2469696 Aborted                    \"$tmp/new/kboot-gpu-g15\" \"$s\" > \"$tmp/new/$s.out\" 2>&1",
+        "kboot-gpu-g15: /tmp/tmp.fgXO1LcINu/new/src/kboot_gpu_g15_host.c:1293: expect_standin_handoff: Assertion `!strcmp(status_of(dtbuf, gpu), \"okay\")' failed.",
+        "FAIL: t8122-j613-standin-10"
+      ]
+    },
+    {
+      "name": "run-m3-move-gate",
+      "command": [
+        "sh",
+        "tests/run-m3-move-gate.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "run-m3-move-gate: pass (7 gate instructions, skip at +244)"
+      ]
+    },
+    {
+      "name": "run-payload-profile",
+      "command": [
+        "sh",
+        "tests/run-payload-profile.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "PASS: exact firmware DT selection, archive order and legacy framebuffer fallback"
+      ]
+    },
+    {
+      "name": "run-t6030-display",
+      "command": [
+        "sh",
+        "tests/run-t6030-display.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "t6030 display host test: all checks passed"
+      ]
+    },
+    {
+      "name": "run-t8122-air-pmp",
+      "command": [
+        "sh",
+        "tests/run-t8122-air-pmp.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "FDT: T8122 PMP values passed in /chosen/asahi,t8122-pmp",
+        "FDT: T8122 PMP is not where the kernel expects it; no PMP values passed",
+        "FDT: T8122 PMP values passed in /chosen/asahi,t8122-pmp",
+        "FDT: T8122 PMP is not where the kernel expects it; no PMP values passed",
+        "actual Air PMP admission/callers: both boards, explicit intent, own data and resource refusal PASS"
+      ]
+    },
+    {
+      "name": "run-t8122-display-handoff",
+      "command": [
+        "sh",
+        "tests/run-t8122-display-handoff.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "contract-selftest: ok   selftest: display memory-region-names removed is caught (2 check(s) fail)",
+        "contract-selftest: ok   selftest: piodma disabled is caught (1 check(s) fail)",
+        "contract-selftest: ok   selftest: dcp firmware-compat 14.8.3 is caught (1 check(s) fail)",
+        "contract-selftest: ok   selftest: apple,dcp-os-log removed is caught (1 check(s) fail)",
+        "contract-selftest: ok   selftest: display marker removed is caught (1 check(s) fail)",
+        "contract-selftest: ok   selftest: framebuffer not compatible framebuffer is caught (1 check(s) fail)",
+        "contract-selftest: pass",
+        "T8122 display handoff: every scenario passes"
+      ]
+    },
+    {
+      "name": "run-t8122-full-start",
+      "command": [
+        "sh",
+        "tests/run-t8122-full-start.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "FDT: GPU: Max power table: 0 2000000 ",
+        "FDT: GPU: T8122 GPU setup failed, leaving the gpu node disabled",
+        "FDT: GPU: loaded GPU firmware is not a known ABI",
+        "FDT: GPU: T8122 GPU setup failed, leaving the gpu node disabled",
+        "FDT: GPU: ID_VERSION 0x07033000 (gen 7 variant 3 rev 3.0)",
+        "FDT: GPU: core mask 0x0000000000000000000fffff",
+        "FDT: GPU: Core counts: 10 10 ",
+        "actual full14 start callers: 15 inherited and 10 J615 start/refusal controls, existing-vote refusal, GPU26/T6030 read-path preservation PASS"
+      ]
+    },
+    {
+      "name": "run-t8122-gpu-diagnostics",
+      "command": [
+        "sh",
+        "tests/run-t8122-gpu-diagnostics.sh"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "PASS: opt-in, metadata, idempotency, allocation failure, bounds and 481 capacity boundaries",
+        "full14 powered identity producer: positive 8/10-core, opt-in, chip/read/topology, rollback and FDT failure controls PASS"
+      ]
+    },
+    {
+      "name": "run-stage1-config",
+      "command": [
+        "python3",
+        "tests/run-stage1-config.py"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "Stage 1: invalid in-image config; using proxy fallback",
+        "Stage 1: invalid in-image config; using proxy fallback",
+        "Stage 1: invalid in-image config; using proxy fallback",
+        "Stage 1: invalid in-image config; using proxy fallback",
+        "Stage 1: invalid in-image config; using proxy fallback",
+        "PASS: stage1 config CRC, factory proxy fallback, UUID/path/window validation"
+      ]
+    },
+    {
+      "name": "run-t8122-25g83-board",
+      "command": [
+        "python3",
+        "tests/run-t8122-25g83-board.py"
+      ],
+      "exit_code": 0,
+      "tail": [
+        "PASS actual board/rank helpers with real FDT: J613, J615 intent, wrong board/firmware, ambiguous identity and malformed switch",
+        "PASS disabled uniqueness guard fails ambiguous-identity control"
+      ]
+    }
+  ],
+  "g15": {
+    "passed": 65,
+    "failed": 10,
+    "failures": [
+      "t8122-j613-standin-10",
+      "t8122-j613-standin-8",
+      "t8122-j613-standin-idleoff",
+      "t8122-j613-standin-sram-below",
+      "t8122-j613-standin-no-room",
+      "t8122-j613-standin-wrong-id",
+      "t8122-j613-standin-fuse-off",
+      "t8122-j613-standin-fuse-on",
+      "t8122-j613-standin-fuse-on-fault",
+      "t8122-j613-standin-fuse-not-j613"
+    ],
+    "baseline_commit": "fec93c15a03b1f5243a3794b495b48ea6a596fcc",
+    "baseline_failures_identical": true
+  },
+  "neo": {
+    "source_commit": "1b36287e04788f4a028e6180c64d3d96e49f06b1",
+    "stage2_built": true,
+    "pytest_passed": 80,
+    "pytest_skipped": 7,
+    "sha256": "3096d3e37fc329f0c53a3ddf727f253681cb8c9d4892155b022df1cce6e95086"
+  },
+  "kernel_mesa_abi": {
+    "selected_facts_matched": 18,
+    "hardware_qualification": false
+  },
+  "hardware_tests": false,
+  "stage1_installed": false,
+  "boot_policy_changed": false,
+  "reviewed_test_tree": "87127fee78b2fd12d4a5ccf3433dd5b8d4ec75a7"
+}
