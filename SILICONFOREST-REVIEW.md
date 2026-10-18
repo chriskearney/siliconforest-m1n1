@@ -102,11 +102,39 @@ a positive control, and foreign chip/tree controls refuse T8122 publication.
 The paired J613 DTB now includes the disabled internal DCP Type-C route.
 Minimum kernel commit is 17a9930f20a0895b5980385b0b2d67edda8a24be; use a
 matching kernel and DTB from one pin. The internal panel additionally depends
-on atcphy1 probing. The new kernel carry is in normal drm/apple and the normal
-display gate, not the alternative M3 copies. Its external gate still requires
-firmware-compat 14.7.0. Camera support on 26.6.2 is a separate statement.
+on atcphy1 probing. The 25G83 DT includes the same base tree, so this PHY
+dependency and pairing floor apply to it too. The new kernel carry is in normal
+drm/apple and the normal display gate. Both gate Kconfigs depend on
+!SILICONFOREST_M3; the alternative M3 copies intentionally have no T8122/J613
+support. Do not port this carry to them. The external gate requires exactly
+three u32 firmware-compat cells: 14 7 0. The 26.6.2 native-panel profile bypasses
+this gate and leaves dcpext disabled; camera support there does not supply
+external display.
 
 The contributor's hardware evidence is in omacom/linux-aurora issue 103 and
 PR114. Our validation adds host failure injection and internal-display checks
 against the exact new DTB; it is not a new physical display or suspend test.
 The existing M3 relocation algorithm and T6030 PMP chosen export are unchanged.
+
+
+## Kernel consumer confirmation at 17a9930f
+
+The kernel maintainer confirmed the handoff contract against
+17a9930f20a0895b5980385b0b2d67edda8a24be. The gate requires a disabled dcpext,
+a u32 readiness marker equal to 1, exactly 14 7 0 firmware compatibility, and a
+memory-region; m1n1 also publishes iommu-addresses. Its disabled DARTs, mailbox
+and route crossbars are enabled together in one kernel changeset. Existing
+nomodeset, DRM configuration, PMP request and command-line admission checks
+still apply. No driver or default changes are needed for this confirmation.
+
+| Export | Consumer at the paired kernel revision |
+| --- | --- |
+| apple,j514s-native-piodma; apple,j514s-inherited-mappings; aurora,j514s-display-handoff; apple,tunable-dp-calibration | Alternative M3 display/PHY profile and m3-g15 DTs only. |
+| asahi,t6031-pmp; asahi,t6031-fw-uuids | Normal display gate with apple_t6031_display.enable=1. |
+| asahi,t6031-gpu; asahi,t6031-gpu-powered-identity | Normal t6031_knobs path with asahi.t6031_start=1. |
+| asahi,t6031-facts; asahi,t6031-gpu-image | No kernel reader at this revision; diagnostic records, not kernel activation inputs. |
+
+Old m1n1 with the new kernel leaves external display unarmed. New m1n1 with an
+old kernel also leaves dcpext disabled, but only a DTB matching that old kernel
+is a valid fallback: a new J613 DTB with an old kernel breaks the internal
+panel. Roll back the kernel and its DTBs as a matched set.

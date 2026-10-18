@@ -62,11 +62,14 @@ The paired kernel is `17a9930f20a0895b5980385b0b2d67edda8a24be` or a descendant.
 **Never ship the new J613 DTB with an older kernel:** its disabled internal
 Type-C route is not accepted by the older panel driver. Build the kernel and
 DTBs from one locked source revision. The panel now also waits for atcphy1.
+The 25G83 tree includes the same base DT, so both rules apply to it too.
 
 The marker consumer and lid-closed second-display work are in the normal
-kernel display profile. Its external firmware gate admits 14.7.0; the 26.6.2
-camera fix is separate. Do not infer external-display support on 26.6.2 or in
-the alternative M3 display-driver copies from this marker's presence.
+kernel display profile. Its external firmware gate requires exactly three u32
+cells, `14 7 0`. The paired kernel has no J613 external display on 26.6.2;
+the camera fix is separate. Both display gates depend on
+`!SILICONFOREST_M3`: the alternative M3 copies intentionally have no T8122/J613
+support. See the [review](SILICONFOREST-REVIEW.md) for export consumers and rollback.
 
 ## Build and check
 
