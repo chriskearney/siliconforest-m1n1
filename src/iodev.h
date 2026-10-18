@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef IODEV_H
 #define IODEV_H
@@ -63,5 +63,7 @@ void iodev_console_flush(void);
 iodev_usage_t iodev_get_usage(iodev_id_t id);
 void iodev_set_usage(iodev_id_t id, iodev_usage_t usage);
 void *iodev_get_opaque(iodev_id_t id);
+
+void iodev_reset_rp(iodev_id_t id);
 
 #endif

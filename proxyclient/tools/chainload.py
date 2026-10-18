@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: GPL-2.0-or-later
 import sys, pathlib
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
@@ -31,7 +31,7 @@ if args.raw:
     entry = new_base + args.entry_point
 else:
     macho = MachO(args.payload.read_bytes())
-    image = macho.prepare_image()
+    image, _ = macho.prepare_image()
     image += b"\x00\x00\x00\x00"
     entry = macho.entry
     entry -= macho.vmin

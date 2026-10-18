@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 
 #include "proxy.h"
 #include "cpufreq.h"
@@ -558,8 +558,11 @@ int proxy_process(ProxyRequest *request, ProxyReply *reply)
         case P_HV_ADD_TIME:
             hv_add_time(request->args[0]);
             break;
-        case P_HV_SPRR_SET_ACTIVE:
-            hv_sprr_set_active(request->args[0]);
+        case P_HV_SPTM_SET_MODE:
+            hv_sptm_set_mode(request->args[0]);
+            break;
+        case P_HV_SPRR_RESERVE_POOL:
+            reply->retval = hv_sprr_reserve_pool(request->args[0]);
             break;
 
         case P_FB_INIT:

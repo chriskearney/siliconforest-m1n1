@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 
 #include "hv.h"
 #include "adt.h"
@@ -6,6 +6,7 @@
 #include "cpu_regs.h"
 #include "display.h"
 #include "gxf.h"
+#include "hv_sprr.h"
 #include "memory.h"
 #include "pcie.h"
 #include "smp.h"
@@ -29,6 +30,8 @@ u64 hv_secondary_tick_interval;
 int hv_pinned_cpu;
 int hv_want_cpu;
 
+enum hv_sptm_mode hv_sptm_mode = SPTM_NONE;
+
 static bool hv_has_ecv;
 static bool hv_should_exit[MAX_CPUS];
 bool hv_started_cpus[MAX_CPUS];
@@ -39,7 +42,7 @@ static u64 hv_cpu_state_regs[MAX_CPUS];
 
 static bool hv_cpu_state_access(struct exc_info *ctx, u64 ipa, u64 *val, bool write, int width)
 {
-    if (1 << width != 4)
+    if (width != 2 && width != 3)
         return false;
     if (write)
         return hv_pa_rw(ctx, ipa, val, write, width);
@@ -116,6 +119,9 @@ static u64 hv_secondary_regs[MAX_CPUS][4];
 static bool hv_shutdown_failed;
 static bool hv_setup_pending[MAX_CPUS];
 
+u64 nvMem[MAX_CPUS][0x800] __attribute__((aligned(0x4000)));
+u64 anvMem[MAX_CPUS][0x800] __attribute__((aligned(0x4000)));
+
 static void hv_enable_sme_zt0(void)
 {
     u64 sme = FIELD_GET(ID_AA64PFR1_SME, mrs(SYS_ID_AA64PFR1_EL1));
@@ -124,6 +130,13 @@ static void hv_enable_sme_zt0(void)
 
     /* Don't trap SME instructions to EL2 */
     reg_set(SYS_SMCR_EL2, SMCR_EZT0);
+}
+
+/* must be called before hv_init */
+void hv_sptm_set_mode(enum hv_sptm_mode mode)
+{
+    printf("HV: SPTM mode %d\n", mode);
+    hv_sptm_mode = mode;
 }
 
 static int hv_join_cpus(void)
@@ -178,6 +191,7 @@ int hv_init(void)
     hv_wdt_init();
 
     hv_pt_init();
+    hv_sprr_init();
 
     // Configure hypervisor defaults
     hv_write_hcr(HCR_API | // Allow PAuth instructions
@@ -187,6 +201,14 @@ int hv_init(void)
                  HCR_RW |  // AArch64 guest
                  HCR_AMO | // Trap SError exceptions
                  HCR_VM);  // Enable stage 2 translation
+    sysop("isb");
+
+    if (hv_sptm_mode == SPTM_NESTED_VIRT) {
+        printf("Enabling NV\n");
+        hv_write_hcr(mrs(SYS_HCR_EL2) | HCR_NV2 | HCR_NV);
+        msr(VNCR_EL2, &nvMem[0]);
+        msr(SYS_IMP_APL_AVNCR_EL2, &anvMem[0]);
+    }
 
     // No guest vectors initially
     msr(VBAR_EL12, 0);
@@ -239,6 +261,11 @@ int hv_start(void *entry, u64 regs[4])
          * so do not enter a new guest in this same request. */
         printf("HV: previous session required cleanup; retry guest initialization\n");
         return -1;
+    }
+
+    if (!hv_cpu_power_init()) {
+        printf("HV: CPU power protection hooks failed; can't start the hypervisor\n");
+        return;
     }
 
     if (!hv_cpu_state_setup_hook()) {
@@ -338,6 +365,11 @@ static void hv_init_secondary(struct hv_secondary_info_t *info)
         msr(SYS_IMP_APL_AGTCNTRDIR_EL12, info->agt_cnt_rdir_el12);
     }
 
+    if (hv_sptm_mode == SPTM_NESTED_VIRT) {
+        msr(VNCR_EL2, &nvMem[smp_id()]);
+        msr(SYS_IMP_APL_AVNCR_EL2, &anvMem[smp_id()]);
+    }
+
     if (cpu_features->apple_sysregs_unlocked)
         reg_mask(SYS_IMP_APL_CYC_OVRD, CYC_OVRD_WFI_MODE_MASK, CYC_OVRD_WFI_MODE(0));
 
@@ -374,6 +406,9 @@ int hv_start_secondary(int cpu, void *entry, u64 regs[4])
 
     printf("HV: Initializing secondary %d\n", cpu);
     iodev_console_flush();
+
+    if (hv_sptm_mode == SPTM_EMULATION)
+        hv_sprr_init_secondary(cpu);
 
     hv_setup_pending[cpu] = true;
     int ret = mmu_init_secondary(cpu);
@@ -470,6 +505,14 @@ void hv_write_hcr(u64 val)
         msr(HCR_EL2, val);
 }
 
+void hv_write_hacr(u64 val)
+{
+    if (gxf_enabled() && !in_gl12())
+        gl2_call(hv_write_hacr, val, 0, 0, 0);
+    else
+        msr(HACR_EL2, val);
+}
+
 u64 hv_get_spsr(void)
 {
     if (in_gl12())
@@ -533,6 +576,7 @@ void hv_arm_tick(bool secondary)
     else
         msr(CNTP_TVAL_EL0, hv_tick_interval);
     msr(CNTP_CTL_EL0, CNTx_CTL_ENABLE);
+    hv_sprr_timer_arm();
 }
 
 void hv_maybe_exit(void)
@@ -553,4 +597,10 @@ void hv_tick(struct exc_info *ctx)
             hv_exc_proxy(ctx, START_HV, HV_USER_INTERRUPT, NULL);
     }
     hv_vuart_poll();
+}
+
+bool hv_is_nested(void)
+{
+    u64 hcr = mrs(HCR_EL2);
+    return (hcr | HCR_NV2 | HCR_NV) == hcr;
 }

@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 
 #ifndef HV_H
 #define HV_H
@@ -7,6 +7,15 @@
 #include "iodev.h"
 #include "types.h"
 #include "uartproxy.h"
+
+enum hv_sptm_mode {
+    SPTM_NONE = 0,
+    SPTM_EMULATION = 1,
+    SPTM_NESTED_VIRT = 2,
+};
+
+extern enum hv_sptm_mode hv_sptm_mode;
+void hv_sptm_set_mode(enum hv_sptm_mode mode);
 
 typedef bool(hv_hook_t)(struct exc_info *ctx, u64 addr, u64 *val, bool write, int width);
 
@@ -102,7 +111,9 @@ void hv_do_panic(void);
     } while (0)
 
 /* Utilities */
+void hv_update_fiq(void);
 void hv_write_hcr(u64 val);
+void hv_write_hacr(u64 val);
 u64 hv_get_spsr(void);
 void hv_set_spsr(u64 val);
 u64 hv_get_esr(void);
@@ -111,10 +122,13 @@ u64 hv_get_elr(void);
 u64 hv_get_afsr1(void);
 void hv_set_elr(u64 val);
 
+bool hv_is_nested(void);
+
 /* HV main */
 int hv_init(void);
 int hv_start(void *entry, u64 regs[4]);
 int hv_start_secondary(int cpu, void *entry, u64 regs[4]);
+bool hv_cpu_power_init(void);
 void hv_exit_cpu(int cpu);
 void hv_rendezvous(void);
 bool hv_switch_cpu(int cpu);

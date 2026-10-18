@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 
 // #define DEBUG
 
@@ -1273,6 +1273,14 @@ bool hv_handle_dabort(struct exc_info *ctx)
             return false;
 
         hv_sprr_pt_updated(ctx, ipa, bytes);
+        return true;
+    }
+
+    if (is_write && hv_sprr_is_commpage(ipa)) {
+        u64 bytes;
+        if (!hv_emulate_pt_store(ctx, far, ipa, &bytes))
+            return false;
+        hv_sprr_commpage_updated(ipa, bytes);
         return true;
     }
 
