@@ -138,3 +138,36 @@ Old m1n1 with the new kernel leaves external display unarmed. New m1n1 with an
 old kernel also leaves dcpext disabled, but only a DTB matching that old kernel
 is a valid fallback: a new J613 DTB with an old kernel breaks the internal
 panel. Roll back the kernel and its DTBs as a matched set.
+
+
+## T600x route handoff follow-up
+
+[PR33](https://github.com/aurora-silicon/m1n1/pull/33),
+`9b4dcc65874e3aa64898a375d1e3f453f03b6aee`, is adapted by Chris Kearney in
+`24a133ff` with Andreas Fernandez credited for the original public design;
+`99817310` preserves the legacy enable path. The larger downstream transaction,
+exact-status checks, reservation fix and tests are attributed to their downstream
+author. `a28c2231` adds a later-controller regression and wording corrections.
+For T6000/T6001/T6002, explicitly disabled routes and their reserved owning DCP
+are published together through a scratch-FDT transaction. Failed allocation,
+property edits, malformed tree traversal or reservation abort publication.
+Missing, already-enabled, reserved, failed and malformed route statuses are
+preserved. An existing reservation allocation error now returns failure instead
+of a stale zero. Other chips keep their original allocation-free controller
+enablement; optional external enable failures keep log-and-continue behavior.
+
+Our kernel already skips unavailable route ancestors (`5ca53abe30ab`) and its
+T600x routes intentionally carry no status. They retain today's dual USB-C
+behavior with older loaders; this helper does not claim to newly unlock that
+feature. It also supports upstream-style DTBs with explicitly disabled routes.
+The paired kernel locks the fixed-HDMI/all-disabled compatibility policy while
+retaining strict T6030/T8122 external admission. The T8122 marker transaction,
+disabled suppliers/routes, and the separate T6030 handoff remain unchanged.
+
+Validation: 26 Python cases passed with 7 skipped using USE_CLANG=1, including
+real-libfdt relocation and failure controls and the production reservation
+caller. A T8112-style injected first enable failure still reserves/enables the
+second controller; restoring an early bail fails this regression. Focused T6030 and T8122 display host tests passed. Stage 2 builds with
+LLVM 22.1.8 and Rust 1.99.0; no boot policy or installed payload was changed.
+These checks do not qualify physical multi-monitor or suspend/resume operation.
+The previously documented full G15 fixture debt remains outside this change.
