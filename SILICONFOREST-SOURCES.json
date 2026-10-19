@@ -1830,7 +1830,16 @@
       "title": "kboot: enable the Type-C display routes of the DCPs m1n1 enables",
       "state": "open",
       "merged_at": null,
-      "head_commit": "9b4dcc65874e3aa64898a375d1e3f453f03b6aee"
+      "head_commit": "9b4dcc65874e3aa64898a375d1e3f453f03b6aee",
+      "integration": {
+        "import_commit": "24a133ffae06d2b8598173329953ba802a82ca46",
+        "review_followup_commit": "99817310f70204e3dc469c3ec0c53f94a008a292",
+        "scope": "T600x disabled-route transaction; preserve other chip route ownership and existing no-status downstream DTBs",
+        "hardware_qualified": false,
+        "optional_controller_test_commit": "a28c2231045abc6695e6d8302bcdb5100805d202",
+        "downstream_author": "Chris Kearney",
+        "based_on_author": "Andreas Fernandez"
+      }
     },
     {
       "url": "https://github.com/aurora-silicon/m1n1/pull/32",
@@ -2105,26 +2114,27 @@
       "tested": false
     }
   ],
-  "reviewed_code_commit": "1ecaa8c59d55e0b51275f6ebc063808c2c70bd21",
+  "reviewed_code_commit": "a28c2231045abc6695e6d8302bcdb5100805d202",
   "kernel": {
     "repository": "https://github.com/iconidentify/siliconforest-linux",
     "branch": "siliconforest/next",
-    "commit": "17a9930f20a0895b5980385b0b2d67edda8a24be",
-    "native_abi_config": "CONFIG_SILICONFOREST_M3=y"
+    "commit": "7560c8b4747f79cf18d8ac90c11f6bec9f4e2eca",
+    "native_abi_config": "CONFIG_SILICONFOREST_NATIVE_GPU=y",
+    "profile_note": "The production M3 GPU profile retains normal display and USB4 drivers. CONFIG_SILICONFOREST_M3 is a separate alternative full-stack profile."
   },
   "mesa": {
     "repository": "https://github.com/iconidentify/siliconforest-mesa",
     "branch": "siliconforest/next",
-    "commit": "b670e85194845a8c8e7f1dea1807ab82c03563e5"
+    "commit": "7515336b3dfbe8943b555ffec9817b9ed64379a8"
   },
   "scope": "Public-source discovery snapshot. An archived source ref is evidence, not approval or hardware qualification. Private Mesa research remains local.",
   "upstream_integrated": "25b1d89ca50be848b136ce771ce7167244852a91",
   "reviewed_source_trees": {
-    "src": "d1dc03c4a135fdf2fd44013f6582890c4c2662a7",
+    "src": "62eb83eb782bdde3d3b72fd006a874ccfae9fef2",
     "rust": "b98d7253c030c276fc9627ff2f61b24d35dc754d",
     "Makefile": "adb9e7b78c2d6429559747047fd44c417ec38db0"
   },
-  "reviewed_test_tree": "211d36c4e0359df6e88df231cfda59b6921b3400",
+  "reviewed_test_tree": "1362d3d2e3c87e864a6cce0c2ced97a606136521",
   "patch_sources": [
     {
       "repository": "https://github.com/GehrmannSolutions/omarchy-m3-air",

@@ -214,5 +214,24 @@
     "internal_display_host_scenarios_with_pinned_dtb": "passed",
     "production_fault_injection": "passed",
     "physical_display_test": false
+  },
+  "t600x_routes_followup": {
+    "checked_at_utc": "2026-10-19T00:43:29.712527+00:00",
+    "code_commit": "a28c2231045abc6695e6d8302bcdb5100805d202",
+    "python_passed": 26,
+    "python_skipped": 7,
+    "targeted_routes_and_t8122_passed": 4,
+    "host_scripts_passed": [
+      "run-t6030-display.sh",
+      "run-t8122-display-handoff.sh"
+    ],
+    "main_stage2_built": true,
+    "stage2_sha256": "7c52a798813149a37d0699268b6a65333f5a2755c12230f42ee0628dd4f01375",
+    "stage2_flags": "#define RELEASE\n",
+    "hardware_qualified": false,
+    "installed": false,
+    "old_g15_fixture_debt_resolved": false,
+    "optional_enable_bail_mutant_rejected": true,
+    "attribution_corrected_without_changing_initial_reviewed_tree": true
   }
 }
