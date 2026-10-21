@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-only
 """Exercise the production hardware-presence fixup against real libfdt trees."""
 from pathlib import Path
 import subprocess
