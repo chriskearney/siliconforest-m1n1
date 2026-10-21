@@ -51,7 +51,7 @@ def artwork_inputs(folder):
     return manifest_bytes, images
 
 
-def check_image(folder, role):
+def check_image(folder, role, artwork):
     cfg = (folder / "build_cfg.h").read_text().splitlines()
     defines = {line[len("#define "):] for line in cfg if line.startswith("#define ")}
     expected = {"RELEASE", "CHAINLOADING", "BUILTIN_LOGO bootlogo"}
@@ -64,6 +64,9 @@ def check_image(folder, role):
     image = (folder / "m1n1.bin").read_bytes()
     if not image.endswith(b"STACKBOT") or image.count(MAGIC) != (role == "stage1"):
         raise ValueError(f"{role}: wrong bare-image/configuration layout")
+    for name, pixels in artwork.items():
+        if image.count(pixels) != 1:
+            raise ValueError(f"{role}: pinned artwork {name} is not linked exactly once")
     elf = (folder / "m1n1-raw.elf").read_bytes()
     if elf[:6] != b"\x7fELF\x02\x01" or struct.unpack_from("<H", elf, 18)[0] != 183:
         raise ValueError(f"{role}: expected AArch64 ELF64")
@@ -140,7 +143,8 @@ def build(args):
                 subprocess.run(make, cwd=tree, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
             for name in ("m1n1.bin", "m1n1-raw.elf", "m1n1.elf", "build_cfg.h", "build_tag.h"):
                 shutil.copy2(tree / "build" / name, folder / name)
-            roles[role] = check_image(folder, role)
+            roles[role] = check_image(folder, role, images)
+            roles[role]["linked_artwork_verified"] = True
             roles[role]["make_options"] = ["RELEASE=1", *options, "USE_CLANG=1",
                                            "ARCH=aarch64-linux-gnu", "EXTRA_CFLAGS=-Werror",
                                            "BUILTIN_LOGO=bootlogo"]
