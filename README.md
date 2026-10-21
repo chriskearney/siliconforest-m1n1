@@ -43,6 +43,12 @@ recovery profile and its configuration ABI; ESP stage 2 uses the emitted
 storage chainloader. The recipe verifies the effective defines, raw ELF entry,
 ELF-to-binary equality and `STACKBOT` tail, and records source, artwork,
 toolchains and artifact hashes in `receipt.json` and `SHA256SUMS`.
+Compiler prefix maps remove temporary and home paths from the debug ELFs and
+Rust file names. The receipt records the full Make argument list and Rust
+flags with those paths normalized; build logs are redacted with the same maps.
+Logs retain parallel ordering and timings, so the complete bundle and its
+`SHA256SUMS` file are not claimed to be reproducible even when the binary,
+ELFs and receipt match across repeated builds.
 
 The artwork is linked raw RGBA. To change it later, regenerate the branding
 export and build a new version; inherited source artwork is unchanged. Existing

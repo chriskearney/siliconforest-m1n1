@@ -35,6 +35,35 @@ def command(args, **kwargs):
     return subprocess.check_output(args, text=True, **kwargs).strip()
 
 
+def require_make(version):
+    match = re.match(r"GNU Make (\d+)\.(\d+)(?:[.\s]|$)", version)
+    if not match or tuple(map(int, match.groups())) < (4, 3):
+        raise ValueError("GNU Make 4.3 or newer is required")
+
+
+def path_maps(tree, temporary, env):
+    """Broad maps first; more-specific compiler prefix maps take precedence."""
+    home = Path.home().resolve()
+    entries = {
+        str(home): "/siliconforest/neo/home",
+        str(Path(env.get("CARGO_HOME", home / ".cargo")).resolve()): "/siliconforest/neo/cargo",
+        str(Path(env.get("RUSTUP_HOME", home / ".rustup")).resolve()): "/siliconforest/neo/rustup",
+        str(temporary): "/siliconforest/neo/build",
+        str(tree): "/siliconforest/neo/" + tree.name.removeprefix("source-"),
+    }
+    # These paths become Make/shell command arguments, without shell quoting.
+    if any(not re.fullmatch(r"[A-Za-z0-9_./-]+", path) for path in entries):
+        raise ValueError("compiler prefix-map paths contain whitespace or Make/shell metacharacters")
+    return sorted(entries.items(), key=lambda item: len(item[0]))
+
+
+def normalize_paths(text, mappings):
+    # The narrowest source path must be replaced before its home/temp parent.
+    for original, replacement in reversed(mappings):
+        text = text.replace(original, replacement)
+    return text
+
+
 def publish_directory(source, output):
     """Atomically publish on Linux, refusing even a concurrently created empty dir."""
     library = ctypes.CDLL(None, use_errno=True)
@@ -125,6 +154,7 @@ def build(args):
         env.pop(key, None)
     versions = {tool: command([tool, "--version"], env=env)
                 for tool in ("clang", "ld.lld", "llvm-objcopy", "rustc", "cargo", "make")}
+    require_make(versions["make"])
     if not versions["rustc"].startswith(f"rustc {RUST} "):
         raise ValueError("unexpected Rust version")
     if not versions["cargo"].startswith(f"cargo {RUST} "):
@@ -151,19 +181,31 @@ def build(args):
                 tar.extractall(tree, filter="data")
             folder = result / role
             folder.mkdir()
+            mappings = path_maps(tree, temp, env)
+            cflags = "-Werror " + " ".join(
+                f"-ffile-prefix-map={original}={replacement}" for original, replacement in mappings)
+            rustflags = ["-D", "warnings", *(
+                f"--remap-path-prefix={original}={replacement}" for original, replacement in mappings)]
+            role_env = dict(env, CARGO_ENCODED_RUSTFLAGS="\x1f".join(rustflags))
             make = ["make", "-j" + str(args.jobs), "RELEASE=1", *options,
-                    "USE_CLANG=1", "ARCH=aarch64-linux-gnu", "EXTRA_CFLAGS=-Werror",
+                    "USE_CLANG=1", "ARCH=aarch64-linux-gnu", "EXTRA_CFLAGS=" + cflags,
                     "TOOLCHAIN=", "LLDDIR=", "RUSTARCH=aarch64-unknown-none-softfloat",
                     "BUILTIN_LOGO=bootlogo", "BOOTLOGO_DIR=" + str(art), "M1N1_VERSION_TAG=" + tag]
             with (folder / "build.log").open("w") as log:
-                subprocess.run(make, cwd=tree, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
+                subprocess.run(make, cwd=tree, env=role_env, stdout=log, stderr=subprocess.STDOUT, check=True)
+            log_path = folder / "build.log"
+            log_path.write_text(normalize_paths(log_path.read_text(), mappings))
             for name in ("m1n1.bin", "m1n1-raw.elf", "m1n1.elf", "build_cfg.h", "build_tag.h"):
                 shutil.copy2(tree / "build" / name, folder / name)
+                data = (folder / name).read_bytes()
+                if any(original.encode() in data for original, _ in mappings):
+                    raise ValueError(f"{role}: build host path remains in {name}")
             roles[role] = check_image(folder, role, images)
             roles[role]["linked_artwork_verified"] = True
-            roles[role]["make_options"] = ["RELEASE=1", *options, "USE_CLANG=1",
-                                           "ARCH=aarch64-linux-gnu", "EXTRA_CFLAGS=-Werror",
-                                           "BUILTIN_LOGO=bootlogo"]
+            roles[role]["make_argv"] = [normalize_paths(arg, mappings) for arg in make]
+            roles[role]["rustflags"] = [normalize_paths(arg, mappings) for arg in rustflags]
+            roles[role]["host_paths_absent"] = True
+            versions = {name: normalize_paths(value, mappings) for name, value in versions.items()}
             if role == "stage1":
                 shutil.copy2(tree / "LICENSE", result / "LICENSE")
                 shutil.copytree(tree / "LICENSES", result / "LICENSES")
@@ -179,6 +221,7 @@ def build(args):
             "installed": False, "signed": False,
             "limits": ["No installation or boot-policy change is performed.",
                        "Stage 1 is generic until filled for an authorized target in Recovery.",
+                       "Build logs retain parallel ordering and timing; whole-bundle reproducibility is not claimed.",
                        "Paired kernel/DTB/Mesa and the boot backend require separate qualification."]}
         (result / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
         paths = [p for p in sorted(result.rglob("*")) if p.is_file()]

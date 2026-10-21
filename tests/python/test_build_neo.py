@@ -11,6 +11,28 @@ import pytest
 from tools import build_neo
 
 
+def test_make_minimum_and_flavour():
+    for version in ("GNU Make 4.3\nBuilt for x86_64", "GNU Make 4.4.1", "GNU Make 5.0"):
+        build_neo.require_make(version)
+    for version in ("GNU Make 4.2.1", "GNU Make 3.82", "BSD Make 20261021", "GNU Make unknown"):
+        with pytest.raises(ValueError, match="GNU Make 4.3"):
+            build_neo.require_make(version)
+
+
+def test_log_redaction_keeps_role_and_diagnostics(tmp_path, monkeypatch):
+    home = tmp_path / "host-home"
+    temp = home / "random-temporary"
+    tree = temp / "source-stage1"
+    monkeypatch.setattr(Path, "home", lambda: home)
+    mappings = build_neo.path_maps(tree, temp, {})
+    log = f"error in {tree}/src/main.c; dependency {home}/.cargo/git/source.rs; sysroot {home}/.rustup/lib"
+    normalized = build_neo.normalize_paths(log, mappings)
+    assert str(home) not in normalized
+    assert normalized == (
+        "error in /siliconforest/neo/stage1/src/main.c; dependency "
+        "/siliconforest/neo/cargo/git/source.rs; sysroot /siliconforest/neo/rustup/lib")
+
+
 def artwork(tmp_path):
     (tmp_path / "m1n1").mkdir()
     files = {}

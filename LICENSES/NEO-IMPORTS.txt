@@ -25,7 +25,7 @@ historical identifiers, not assertions of public availability):
 - 07cc079a3cd37696362d44f46ac95c157b8c7307, Ryan Murray, Rust feature:
   https://github.com/aurora-silicon/aura/commit/9ef9932f067bb11482a27394e55cde0435c88111
 - caca423162c32433cdc3c02b08bd3ace4d3ad574, Dj, chosen/SEP test:
-  https://github.com/aurora-silicon/aura/commit/65e063ce
+  https://github.com/aurora-silicon/aura/commit/65e063ceee96492e5668fb1131c3d52343c10098
   tests/python/test_chosen_sep_policy.py is copied from this pre-boundary
   revision, whose LICENSE is MIT; its SPDX identifier follows that revision.
 - 8ec07f42934b36689fd0fb57fa7dbba70eba07f5, Scott Jones, PMGR topology:
