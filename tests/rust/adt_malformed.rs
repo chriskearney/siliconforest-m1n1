@@ -186,6 +186,30 @@ fn main() {
             -15
         );
         assert_eq!((addr, size), (0xa5a5, 0x5a5a));
+        assert_eq!(
+            parser::adt_get_reg(
+                adt,
+                path.as_mut_ptr(),
+                std::ptr::null(),
+                0,
+                &mut addr,
+                &mut size
+            ),
+            -15
+        );
+        let invalid_name = [0xffu8, 0];
+        assert_eq!(
+            parser::adt_get_reg(
+                adt,
+                path.as_mut_ptr(),
+                invalid_name.as_ptr().cast(),
+                0,
+                &mut addr,
+                &mut size
+            ),
+            -15
+        );
+        assert_eq!((addr, size), (0xa5a5, 0x5a5a));
     }
     register_paths();
 }
