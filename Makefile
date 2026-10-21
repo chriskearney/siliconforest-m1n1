@@ -1,5 +1,7 @@
 RUSTARCH ?= aarch64-unknown-none-softfloat
 BUILTIN_LOGO ?= bootlogo
+# Release recipes can pin generated pixels without changing inherited artwork.
+BOOTLOGO_DIR ?= data
 
 ifneq ($(BUILTIN_LOGO),bootlogo)
 ifneq ($(words $(wildcard data/$(BUILTIN_LOGO)_128.bin data/$(BUILTIN_LOGO)_256.bin)),2)
@@ -364,6 +366,21 @@ build-cfg src/../build/build_cfg.h &:
 	$(QUIET)echo "#define BUILTIN_LOGO $(BUILTIN_LOGO)" >> build/build_cfg.tmp
 	$(QUIET)cmp -s build/build_cfg.h build/build_cfg.tmp 2>/dev/null || \
 	( mv -f build/build_cfg.tmp build/build_cfg.h && echo "  CFG   build/build_cfg.h" )
+
+.PHONY: bootlogo-source
+bootlogo-source build/bootlogo-source &:
+	$(QUIET)mkdir -p build
+	$(QUIET)printf '%s\n' '$(abspath $(BOOTLOGO_DIR))' > build/bootlogo-source.tmp
+	$(QUIET)cmp -s build/bootlogo-source build/bootlogo-source.tmp 2>/dev/null || \
+		mv -f build/bootlogo-source.tmp build/bootlogo-source
+
+# Keep raw RGBA storage on this Neo branch; do not change its framebuffer ABI.
+build/bootlogo_%.bin: $(BOOTLOGO_DIR)/bootlogo_%.bin build/bootlogo-source
+	$(QUIET)echo "  IMG   $@"
+	$(QUIET)mkdir -p "$(dir $@)"
+	$(QUIET)test "$$(wc -c < "$<")" -eq "$$(( $* * $* * 4 ))"
+	$(QUIET)cp "$<" "$@.tmp"
+	$(QUIET)mv -f "$@.tmp" "$@"
 
 build/%.bin: data/%.bin
 	$(QUIET)echo "  IMG   $@"
