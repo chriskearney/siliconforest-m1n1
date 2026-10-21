@@ -1,0 +1,20 @@
+SiliconForest Neo source notices
+
+The original MIT copyright notice and terms remain in the root LICENSE.
+Imported contributions retain their own terms; that root file does not replace
+the license of a separately identified contribution.
+
+Files combining inherited MIT source with GPL-2.0-only Aura contributions are
+marked MIT AND GPL-2.0-only. Their MIT portions retain the inherited notice;
+the imported additions retain GPL-2.0-only. The full GPL text is preserved in
+3rdparty_licenses/LICENSE.GPL-2. Tests and third-party components keep their
+individual source notices.
+
+Each carry records its exact public upstream revision and original author.
+Adaptations and newly generated work are identified in the commit history.
+Existing stage-1 configuration and host-wire identifiers remain for ABI
+compatibility; their names do not change authorship or license terms.
+
+Generated branding is a separate, hashed build input. Its export manifest and
+the component licenses accompany the local candidate artifacts. No proprietary
+firmware images, device dumps or private-only source are part of this tree.

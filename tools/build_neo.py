@@ -166,6 +166,7 @@ def build(args):
                                            "BUILTIN_LOGO=bootlogo"]
             if role == "stage1":
                 shutil.copy2(tree / "LICENSE", result / "LICENSE")
+                shutil.copytree(tree / "LICENSES", result / "LICENSES")
                 shutil.copytree(tree / "3rdparty_licenses", result / "3rdparty_licenses")
                 shutil.copy2(tree / "rust/Cargo.lock", result / "Cargo.lock")
         receipt = {

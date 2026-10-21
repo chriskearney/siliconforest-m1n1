@@ -226,7 +226,7 @@ void m1n1_main(void)
 {
     printf("\n\nm1n1 %s\n", m1n1_version);
     printf("Copyright The Asahi Linux Contributors\n");
-    printf("Licensed under the MIT license\n\n");
+    printf("License notices: LICENSE, LICENSES and 3rdparty_licenses\n\n");
 #ifdef T8140_KIS_PROXY
     printf("KIS carrier: retaining inherited DebugUSB\n");
 #endif
