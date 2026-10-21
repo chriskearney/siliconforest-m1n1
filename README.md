@@ -53,6 +53,22 @@ recipe. Hardware qualification requires the matched kernel/DTBs/Mesa, the
 actual firmware tuple and boot backend, attended recovery and a reboot-tested
 rollback. Stage-1 enrollment is a separate owner Recovery operation.
 
+The first attended J700 boot must capture the stage-1-to-stage-2 storage
+handoff log. With the ordinary controller-disable handoff, require
+`nvme: controller disabled; preserving live RTKit session` and successful
+entry into stage 2. `nvme: unsafe post-M4 queue handoff; retaining DMA resources until reboot`
+is a failed qualification: keep the recovery path available and do not bypass
+the refusal. Delete-SQ/CQ errors and controller shutdown/disable timeouts must
+not occur. A separately selected live-Linux-adoption path instead requires
+`nvme: leaving controller and RTKit running for Linux adoption`; that message
+does not qualify the stage-1-to-stage-2 disable path.
+
+Failure-path limits: joining a pending CPU callback waits up to 300 seconds,
+without resending its interrupt, before refusing the boot. This safety rule
+also applies if this source is built for an older supported chip. PMGR's
+missing-parent tolerance covers the known virtual-device cases; cleanup of
+an active non-virtual device with a missing parent still fails strictly.
+
 Run host checks with `USE_CLANG=1 RUSTUP_TOOLCHAIN=1.89.0 python3 -m pytest`.
 Platform skips and source/build results are not physical-display or boot claims.
 

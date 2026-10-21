@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-2.0-only
+# SPDX-License-Identifier: MIT
 """Verify APFS UUID forwarding and the inherited SEP entropy policy."""
 
 from pathlib import Path
