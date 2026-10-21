@@ -638,6 +638,8 @@ int main(int argc, char **argv)
         memcpy(unchanged, tree, sizeof(tree));
         assert(dt_set_display_t8140() == -1);
         assert(!memcmp(unchanged, tree, sizeof(tree)));
+        /* Refused before any reservation reads a DART. */
+        assert(n_collected == 0 && reservation_calls == 0);
     }
     printf("PASS display alias contract\n");
 
