@@ -11,6 +11,8 @@ def test_t8140_display_handoff(tmp_path):
     start = source.index("struct dt_t8140_dram {")
     end = source.index("/* T8142 display carveouts:", start)
     helper = source[start:end]
+    iommu_node = source[source.index("static int dt_get_iommu_node("):
+                        source.index("static dart_dev_t *dt_init_dart_by_node(")]
     asc_source = (repo / "src/asc.c").read_text()
     asc_defs = asc_source[asc_source.index("#define ASC_CPU_CONTROL"):asc_source.index("struct asc_dev {")]
     asc_check = asc_source[asc_source.index("static bool asc_mailbox_empty("):asc_source.index("bool asc_can_recv(")]
@@ -279,11 +281,7 @@ static int dt_set_dcp_firmware(const char *path)
     (void)path;
     return 0;
 }
-static int dt_get_iommu_node(int node, u32 num)
-{
-    assert(num == 0);
-    return node;
-}
+''' + iommu_node + r'''
 typedef struct {u32 phandle, sid;} dart_dev_t;
 static dart_dev_t mock_dart;
 static dart_dev_t *dart_init_fdt_locked(void *blob, u32 phandle, u32 sid)
