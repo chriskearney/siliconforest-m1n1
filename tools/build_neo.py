@@ -37,6 +37,8 @@ def command(args, **kwargs):
 def artwork_inputs(folder):
     manifest_bytes = (folder / "manifest.json").read_bytes()
     manifest = json.loads(manifest_bytes)
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("files"), dict):
+        raise ValueError("artwork manifest must contain a files hash map")
     images = {}
     for size in (48, 128, 256):
         name = f"m1n1/bootlogo_{size}.bin"
@@ -82,6 +84,8 @@ def build(args):
     output = args.output.absolute()
     if output.exists() or output.is_symlink() or not output.parent.is_dir():
         raise ValueError("output must not exist and its parent must exist")
+    if not re.fullmatch(r"[A-Za-z0-9_./-]+", str(output.parent)):
+        raise ValueError("output parent must not contain whitespace or Make/shell metacharacters")
     if not re.fullmatch(r"[0-9a-f]{40}", args.expected_commit):
         raise ValueError("expected commit must be a full lowercase SHA-1")
     if command(["git", "rev-parse", "HEAD"], cwd=source) != args.expected_commit:
@@ -95,10 +99,17 @@ def build(args):
     env = dict(os.environ, RUSTUP_TOOLCHAIN=RUST, RUSTFLAGS="-D warnings",
                CARGO_NET_OFFLINE="true", SOURCE_DATE_EPOCH=command(
                    ["git", "show", "-s", "--format=%ct", args.expected_commit], cwd=source))
+    # These would override the recorded command-line flags or compiler choice.
+    for key in ("MAKEFLAGS", "MFLAGS", "MAKEOVERRIDES", "CARGO_ENCODED_RUSTFLAGS",
+                "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTC", "RUSTDOC",
+                "CARGO_BUILD_TARGET", "CARGO_TARGET_DIR"):
+        env.pop(key, None)
     versions = {tool: command([tool, "--version"], env=env)
                 for tool in ("clang", "ld.lld", "llvm-objcopy", "rustc", "cargo")}
     if not versions["rustc"].startswith(f"rustc {RUST} "):
         raise ValueError("unexpected Rust version")
+    if not versions["cargo"].startswith(f"cargo {RUST} "):
+        raise ValueError("unexpected Cargo version")
     for tool in ("clang", "ld.lld", "llvm-objcopy"):
         if not re.search(r"(?<![\d.])" + re.escape(LLVM) + r"(?![\d.])", versions[tool]):
             raise ValueError(f"unexpected {tool} version")
@@ -123,6 +134,7 @@ def build(args):
             folder.mkdir()
             make = ["make", "-j" + str(args.jobs), "RELEASE=1", *options,
                     "USE_CLANG=1", "ARCH=aarch64-linux-gnu", "EXTRA_CFLAGS=-Werror",
+                    "TOOLCHAIN=", "LLDDIR=", "RUSTARCH=aarch64-unknown-none-softfloat",
                     "BUILTIN_LOGO=bootlogo", "BOOTLOGO_DIR=" + str(art), "M1N1_VERSION_TAG=" + tag]
             with (folder / "build.log").open("w") as log:
                 subprocess.run(make, cwd=tree, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)

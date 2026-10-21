@@ -66,3 +66,14 @@ def test_dirty_source_refused_before_archive(tmp_path, monkeypatch):
     with pytest.raises(ValueError, match="must be clean"):
         build_neo.build(args)
     assert not args.output.exists()
+
+
+def test_make_metacharacters_refused(tmp_path):
+    parent = tmp_path / "unsafe-$(touch surprise)"
+    parent.mkdir()
+    args = argparse.Namespace(source=tmp_path, output=parent / "result",
+                              expected_commit="0" * 40)
+    with pytest.raises(ValueError, match="metacharacters"):
+        build_neo.build(args)
+    assert not (parent / "surprise").exists()
+    assert not args.output.exists()
