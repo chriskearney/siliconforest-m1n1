@@ -15,12 +15,16 @@ def test_pending_calls_block_dt_preparation_and_kernel_publication(tmp_path):
     prepare = source[source.index("int kboot_prepare_dt("):]
     prepare = prepare[:prepare.index("    if (dt) {")] + "    return 123;\n}\n"
     boot = function(source, "kboot_boot")
+    main = (REPO / "src/main.c").read_text()
+    final_guard = main[main.index("next_stage:\n") + len("next_stage:\n"):]
+    final_guard = final_guard[:final_guard.index('    printf("Preparing to run next stage')]
     harness = r'''
 #include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <setjmp.h>
 typedef uint64_t u64; typedef uint32_t u32;
 #define MAX_CPUS 4
 #define T8140 0x8140
@@ -34,6 +38,8 @@ static struct { void *entry; u64 args[5]; bool restore_logo; } next_stage;
 static void *dt = (void *)0x1000;
 static int dt_bufsize = 0x10000;
 static int chip_id, mode, hardware_calls;
+static jmp_buf refused;
+static _Noreturn void panic(const char *format, ...) { longjmp(refused, 1); }
 static int mcc_enable_cache(void) { hardware_calls++; return 0; }
 static void tunables_apply_static(void) {}
 static void clk_init(void) { if (mode == 2) spin_table[1].target = 0x1234; }
@@ -48,7 +54,9 @@ static void pcie_shutdown(void) {}
 static void smp_set_wfe_mode(bool value) {}
 static int dt_t8140_recheck_display(void)
 { if (mode == 3) spin_table[1].target = 0x1234; return 0; }
-''' + pending + prepare + boot + r'''
+''' + pending + prepare + boot + '\nstatic int main_stage_guard(void)\n{\n' + final_guard + r'''
+    return 0;
+}
 int main(void)
 {
     for (int i = 0; i < MAX_CPUS; i++) {
@@ -62,6 +70,12 @@ int main(void)
         next_stage.entry = (void *)0xdead;
         assert(kboot_prepare_dt((void *)1) == -1 && !next_stage.entry);
         assert(!memcmp(saved, spin_table, sizeof(saved)));
+        next_stage.entry = (void *)0xdead;
+        if (!setjmp(refused)) {
+            main_stage_guard();
+            assert(!"pending callback passed the final main-stage guard");
+        }
+        assert(!next_stage.entry && !memcmp(saved, spin_table, sizeof(saved)));
     }
     int chips[] = {0x8103, 0x8112, 0x8122, 0x6030, T8140};
     for (unsigned i = 0; i < sizeof(chips) / sizeof(chips[0]); i++) {
@@ -84,6 +98,8 @@ int main(void)
     memset(spin_table, 0, sizeof(spin_table));
     assert(!smp_has_pending_calls());
     assert(kboot_prepare_dt((void *)1) == 123);
+    next_stage.entry = (void *)0xface;
+    assert(main_stage_guard() == 0 && next_stage.entry == (void *)0xface);
     return 0;
 }
 '''
