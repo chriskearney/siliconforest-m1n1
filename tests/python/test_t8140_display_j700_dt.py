@@ -605,6 +605,46 @@ int main(int argc, char **argv)
     assert(dt_t8140_recheck_display() == 0);
     expect_withdrawn();
     printf("PASS recheck audit\n");
+
+    /* Each alias the handoff follows must name one absolute path. libfdt
+     * follows a relative alias recursively, so anything else fails closed
+     * before the first edit. */
+    static const struct {
+        const char *name, *value;
+        int length;
+    } bad_aliases[] = {
+        {"dcpext", "dcpext", 0},
+        {"dcp", "dcp", 0},
+        {"disp0", "display-subsystem", 0},
+        {"dcpext", "loop", 0},
+        {"dcpext", "/soc/dcp@416e00000", 18},
+        {"dcpext", "/soc/absent", 0},
+        {"dcp", "", 0},
+    };
+    for (size_t i = 0; i < ARRAY_SIZE(bad_aliases); i++) {
+        setup(dtb);
+        int aliases = off("/aliases");
+        if (bad_aliases[i].length)
+            assert(!fdt_setprop(dt, aliases, bad_aliases[i].name, bad_aliases[i].value,
+                                bad_aliases[i].length));
+        else
+            assert(!fdt_setprop_string(dt, aliases, bad_aliases[i].name, bad_aliases[i].value));
+        if (!strcmp(bad_aliases[i].value, "loop"))
+            assert(!fdt_setprop_string(dt, off("/aliases"), "loop", "dcpext"));
+        memcpy(unchanged, tree, sizeof(tree));
+        assert(dt_set_display_t8140() == -1);
+        assert(!memcmp(unchanged, tree, sizeof(tree)));
+    }
+    printf("PASS display alias contract\n");
+
+    /* An absolute external alias names the same controller. */
+    setup(dtb);
+    assert(!fdt_setprop_string(dt, off("/aliases"), "dcpext", DCPEXT));
+    assert(dt_set_display_t8140() == 0);
+    expect(DCPEXT, "okay");
+    expect_display_iommus(true);
+    assert(live_claim() && preflight() == 0x100);
+    printf("PASS absolute external alias\n");
     return 0;
 }
 
@@ -623,7 +663,7 @@ int main(int argc, char **argv)
         check=True,
     )
     result = subprocess.run([str(binary), str(dtb)], check=True, capture_output=True, text=True)
-    assert result.stdout.count("PASS ") == 11, result.stdout
+    assert result.stdout.count("PASS ") == 13, result.stdout
 
 
 def test_t8140_display_j700_fixture(tmp_path):

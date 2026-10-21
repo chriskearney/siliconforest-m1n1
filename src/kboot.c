@@ -3653,8 +3653,18 @@ static int dt_set_display_t8140(void)
         goto refuse;
     }
 
-    if (!fdt_get_alias(dt, "dcp") || !fdt_get_alias(dt, "disp0")) {
-        reason = !fdt_get_alias(dt, "dcp") ? "FDT dcp alias absent" : "FDT disp0 alias absent";
+    /* Each alias this handoff follows must name one absolute path before any
+     * helper resolves it: libfdt follows a relative alias recursively. Only
+     * the external controller's alias is optional. */
+    static const char *const followed[] = {"dcp", "disp0", "dcpext"};
+    for (size_t i = 0; i < ARRAY_SIZE(followed); i++) {
+        int alias = dt_t8140_alias_offset(followed[i]);
+        if (alias >= 0 || (alias == -FDT_ERR_NOTFOUND && i == 2))
+            continue;
+        if (alias != -FDT_ERR_NOTFOUND)
+            reason = "FDT display alias is not a single absolute path";
+        else
+            reason = i ? "FDT disp0 alias absent" : "FDT dcp alias absent";
         goto refuse;
     }
 
@@ -3728,15 +3738,12 @@ static int dt_set_display_t8140(void)
     }
     memcpy(ext_saved, dt, dt_bufsize);
     char ext_path[128];
-    const char *ext = fdt_get_alias(dt, "dcpext");
-    if (ext) {
-        snprintf(ext_path, sizeof(ext_path), "%s", ext);
-        ext = ext_path;
-    } else {
+    const char *ext = NULL;
+    node = dt_t8140_alias_offset("dcpext");
+    if (node == -FDT_ERR_NOTFOUND)
         node = fdt_node_offset_by_compatible(dt, -1, "apple,t8140-dcpext");
-        if (node >= 0 && fdt_get_path(dt, node, ext_path, sizeof(ext_path)) == 0)
-            ext = ext_path;
-    }
+    if (node >= 0 && fdt_get_path(dt, node, ext_path, sizeof(ext_path)) == 0)
+        ext = ext_path;
     bool ext_ready = false;
     u32 ext_step = ext ? 1 : 0;
     if (ext && pmgr_power_is_on(0, "DISPEXT0_CPU") == 1) {
