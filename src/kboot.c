@@ -4243,6 +4243,10 @@ static int dt_setup_mtd_phram(void)
 
 int kboot_prepare_dt(void *fdt)
 {
+    if (smp_has_pending_calls()) {
+        next_stage.entry = NULL;
+        bail("FDT: refusing preparation while secondary callbacks are pending\n");
+    }
     if (dt) {
         free(dt);
         dt = NULL;
@@ -4426,6 +4430,10 @@ int kboot_prepare_dt(void *fdt)
 
 int kboot_boot(void *kernel)
 {
+    if (smp_has_pending_calls()) {
+        next_stage.entry = NULL;
+        bail("kboot: refusing handoff while secondary callbacks are pending\n");
+    }
     int ret = mcc_enable_cache();
     if (ret && chip_id == T8140) {
         printf("kboot: refusing T8140 handoff after MCC cache failure\n");
@@ -4474,6 +4482,10 @@ int kboot_boot(void *kernel)
         return -1;
     printf("Preparing to boot kernel at %p with fdt at %p\n", kernel, dt);
 
+    if (smp_has_pending_calls()) {
+        next_stage.entry = NULL;
+        bail("kboot: secondary callback became pending before kernel entry\n");
+    }
     next_stage.entry = kernel;
     next_stage.args[0] = (u64)dt;
     next_stage.args[1] = 0;
