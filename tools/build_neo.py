@@ -124,7 +124,7 @@ def build(args):
                 "CARGO_BUILD_TARGET", "CARGO_TARGET_DIR"):
         env.pop(key, None)
     versions = {tool: command([tool, "--version"], env=env)
-                for tool in ("clang", "ld.lld", "llvm-objcopy", "rustc", "cargo")}
+                for tool in ("clang", "ld.lld", "llvm-objcopy", "rustc", "cargo", "make")}
     if not versions["rustc"].startswith(f"rustc {RUST} "):
         raise ValueError("unexpected Rust version")
     if not versions["cargo"].startswith(f"cargo {RUST} "):

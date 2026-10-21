@@ -22,6 +22,10 @@ def test_changed_artwork_directory_and_invalid_pixels(tmp_path):
                         *targets], cwd=tmp_path, check=True)
         for size, target in zip((48, 128, 256), targets):
             assert (tmp_path / target).read_bytes() == bytes([byte]) * (size * size * 4)
+    unchanged = [(tmp_path / target).stat().st_mtime_ns for target in targets]
+    subprocess.run(["make", "USE_CLANG=1", f"BOOTLOGO_DIR={tmp_path / 'second'}",
+                    *targets], cwd=tmp_path, check=True)
+    assert [(tmp_path / target).stat().st_mtime_ns for target in targets] == unchanged
     (tmp_path / "second/bootlogo_128.bin").write_bytes(b"truncated")
     result = subprocess.run(["make", "USE_CLANG=1", f"BOOTLOGO_DIR={tmp_path / 'second'}",
                              targets[1]], cwd=tmp_path)

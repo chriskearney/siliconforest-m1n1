@@ -368,7 +368,11 @@ build-cfg src/../build/build_cfg.h &:
 	( mv -f build/build_cfg.tmp build/build_cfg.h && echo "  CFG   build/build_cfg.h" )
 
 .PHONY: bootlogo-source
-bootlogo-source build/bootlogo-source &:
+bootlogo-source:
+
+# Make 4.3 does not force the non-phony peer of a grouped phony target.
+# Check the directory on every invocation, changing the stamp only if needed.
+build/bootlogo-source: bootlogo-source
 	$(QUIET)mkdir -p build
 	$(QUIET)printf '%s\n' '$(abspath $(BOOTLOGO_DIR))' > build/bootlogo-source.tmp
 	$(QUIET)cmp -s build/bootlogo-source build/bootlogo-source.tmp 2>/dev/null || \
