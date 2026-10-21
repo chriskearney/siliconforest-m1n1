@@ -77,3 +77,19 @@ def test_make_metacharacters_refused(tmp_path):
         build_neo.build(args)
     assert not (parent / "surprise").exists()
     assert not args.output.exists()
+
+
+def test_publication_does_not_replace_a_concurrent_empty_directory(tmp_path):
+    source = tmp_path / "staged"
+    source.mkdir()
+    (source / "receipt.json").write_bytes(b"reviewed result")
+    output = tmp_path / "existing"
+    output.mkdir()
+    with pytest.raises(FileExistsError):
+        build_neo.publish_directory(source, output)
+    assert not list(output.iterdir())
+    assert (source / "receipt.json").read_bytes() == b"reviewed result"
+    output.rmdir()
+    build_neo.publish_directory(source, output)
+    assert (output / "receipt.json").read_bytes() == b"reviewed result"
+    assert not source.exists()

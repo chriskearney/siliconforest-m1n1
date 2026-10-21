@@ -3,6 +3,7 @@
 """Build an uninstalled Neo stage-1 / ESP-stage-2 pair from exact source and art."""
 
 import argparse
+import ctypes
 import hashlib
 import io
 import json
@@ -32,6 +33,21 @@ def digest(data):
 
 def command(args, **kwargs):
     return subprocess.check_output(args, text=True, **kwargs).strip()
+
+
+def publish_directory(source, output):
+    """Atomically publish on Linux, refusing even a concurrently created empty dir."""
+    library = ctypes.CDLL(None, use_errno=True)
+    rename = getattr(library, "renameat2", None)
+    if rename is None:
+        raise ValueError("atomic candidate publication requires Linux renameat2")
+    rename.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int,
+                       ctypes.c_char_p, ctypes.c_uint]
+    rename.restype = ctypes.c_int
+    # AT_FDCWD, RENAME_NOREPLACE; all writes remain inside the requested parent.
+    if rename(-100, os.fsencode(source), -100, os.fsencode(output), 1):
+        error = ctypes.get_errno()
+        raise OSError(error, os.strerror(error), str(output))
 
 
 def artwork_inputs(folder):
@@ -169,7 +185,7 @@ def build(args):
             digest(p.read_bytes()) + "  " + p.relative_to(result).as_posix() + "\n" for p in paths))
         if output.exists() or output.is_symlink():
             raise ValueError("output appeared during the build; refusing replacement")
-        result.rename(output)
+        publish_directory(result, output)
     return receipt
 
 

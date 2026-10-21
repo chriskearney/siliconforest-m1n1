@@ -24,7 +24,7 @@ RUSTUP_TOOLCHAIN=1.89.0 make -j4 RELEASE=1 CHAINLOADING=0 USE_CLANG=1 ARCH=aarch
 ```
 
 For a **local, unsigned Neo candidate**, use the role-aware recipe instead
-of the legacy KIS-pair packager. It requires Python 3.12+, a clean worktree,
+of the legacy KIS-pair packager. It requires a Linux build host, Python 3.12+, a clean worktree,
 the exact source SHA, cached Cargo dependencies, and a branding export with
 `manifest.json` plus `m1n1/bootlogo_{48,128,256}.bin`:
 
