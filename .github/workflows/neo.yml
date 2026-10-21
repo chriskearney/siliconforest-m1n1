@@ -1,0 +1,35 @@
+name: Neo source checks
+
+on:
+  push:
+    branches: [experimental/neo, 'integration/neo-*']
+  pull_request:
+    branches: [experimental/neo]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host:
+    runs-on: ubuntu-24.04
+    env:
+      USE_CLANG: '1'
+      RUSTUP_TOOLCHAIN: '1.89.0'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Host compilers and Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang lld llvm gcc make
+          rustup toolchain install 1.89.0 --profile minimal
+          python -m pip install -r requirements.txt pytest==9.1.1
+      - name: Production-source host regressions
+        run: |
+          export PATH="$(llvm-config --bindir):$PATH"
+          python -m pytest -q
+      # Full role builds require the separately pinned branding export and
+      # LLVM 22.1.8. This host job neither publishes nor installs boot images.
