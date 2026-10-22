@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT AND GPL-2.0-or-later
 RUSTARCH ?= aarch64-unknown-none-softfloat
 BUILTIN_LOGO ?= bootlogo
 
@@ -95,6 +96,13 @@ else
 CARGO_FLAGS :=
 endif
 
+# workaround https://github.com/rust-lang/rust/issues/163614 LLVM 23 regression in rust 1.99.0
+# Rust 1.89's LLVM does not know this option. Keep older toolchains usable.
+RUST_LLVM_MAJOR := $(shell rustc --version --verbose | sed -n 's/^LLVM version: //p' | cut -d. -f1)
+ifneq ($(shell test "$(RUST_LLVM_MAJOR)" -ge 21 2>/dev/null && echo supported),)
+CARGO_RUSTFLAGS := --config 'build.rustflags = ["-C", "llvm-args=-disable-loop-idiom-wcslen"]'
+endif
+
 ifeq ($(CHAINLOADING),1)
 CFG += CHAINLOADING
 CARGO_FLAGS += --features chainload
@@ -188,7 +196,7 @@ OBJECTS := \
 	isp.o \
 	kboot.o kboot_atc.o kboot_gpu_t8122.o kboot_gpu_t8122_power.o kboot_pmp_t8122.o \
 	kboot_t6020_compat.o \
-	kboot_display_handoff.o kboot_display_facts.o kboot_gpu26.o \
+	kboot_display_handoff.o kboot_display_facts.o kboot_gpu26.o kboot_gpu_t6031.o kboot_t6031.o \
 	main.o boot_options.o \
 	mitigations.o \
 	mcc.o \
@@ -258,7 +266,7 @@ build/$(RUST_LIB): src/../build/build_cfg.h rust/src/*.rs rust/src/gpu/*.rs rust
 	$(QUIET)echo "  RS    $@"
 	$(QUIET)mkdir -p $(DEPDIR)
 	$(QUIET)mkdir -p "$(dir $@)"
-	$(QUIET)cargo build $(CARGO_FLAGS) --target $(RUSTARCH) --lib --release --manifest-path rust/Cargo.toml --target-dir build
+	$(QUIET)cargo build $(CARGO_RUSTFLAGS) $(CARGO_FLAGS) --target $(RUSTARCH) --lib --release --manifest-path rust/Cargo.toml --target-dir build
 	$(QUIET)cp "build/$(RUSTARCH)/release/${RUST_LIB}" "$@"
 
 build/%.o: src/%.S src/../build/build_cfg.h

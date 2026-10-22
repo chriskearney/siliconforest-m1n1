@@ -1,4 +1,9 @@
-/* SPDX-License-Identifier: MIT */
+/* SPDX-License-Identifier: MIT AND GPL-2.0-or-later */
+/*
+ * Original MIT code retains its MIT terms (LICENSE). The imported GPL portions
+ * and their exact source revisions are listed in docs/m1-m3-handoff-sources.md.
+ * GPL text: 3rdparty_licenses/LICENSE.GPL-2.0.
+ */
 
 #include "../build/build_cfg.h"
 
@@ -762,7 +767,7 @@ int display_init(void)
         fb_clear_direct(); // Old m1n1 stage1 ends up with an ugly logo situation, clear it.
         return display_configure(NULL);
 #ifndef CHAINLOADING
-    } else if (!has_notch && firmware_sfw_in_range(V15_0B1, FW_MAX) &&
+    } else if (!has_notch && chip_id <= T8112 && firmware_sfw_in_range(V15_0B1, FW_MAX) &&
                os_firmware.version < V15_0B1) {
         printf("display: Internal display on t8103 or t8112 with Sequoia SFW, power cycling\n");
         display_needs_power_cycle = true;
