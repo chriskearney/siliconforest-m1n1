@@ -664,7 +664,8 @@ int main(int argc, char **argv)
         "fdt_ro.c", "fdt_rw.c", "fdt_strerror.c", "fdt_sw.c", "fdt_wip.c",
     )]
     subprocess.run(
-        ["cc", "-D_GNU_SOURCE", "-std=c11", "-Wall", "-Wextra", "-Werror", "-Wno-unused-function", "-I", str(libfdt),
+        ["cc", "-D_GNU_SOURCE", "-std=c11", "-Wall", "-Wextra", "-Werror", "-Wno-unused-function",
+         "-fsanitize=undefined", "-fno-sanitize-recover=undefined", "-I", str(libfdt),
          str(source_file), *map(str, sources), "-o", str(binary)],
         check=True,
     )

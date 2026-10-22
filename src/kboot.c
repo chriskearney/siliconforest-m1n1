@@ -2672,7 +2672,7 @@ static bool dt_t8140_table_reservations_fit(void)
             continue;
         if (len < 2 * (int)sizeof(*reg))
             return false;
-        u64 base = fdt64_to_cpu(reg[0]), size = fdt64_to_cpu(reg[1]);
+        u64 base = fdt64_ld(&reg[0]), size = fdt64_ld(&reg[1]);
         if (base > UINT64_MAX - size)
             return false;
         if (base >= start && base + size <= end)
@@ -2787,14 +2787,14 @@ static int dt_t8140_reserve_tables(const char *alias, const struct dt_t8140_dram
             int reg_len;
             const fdt64_t *reg = existing < 0 ? NULL : fdt_getprop(dt, existing, "reg", &reg_len);
             if (reg) {
-                if (reg_len != 2 * sizeof(*reg) || fdt64_to_cpu(reg[0]) != base ||
-                    fdt64_to_cpu(reg[1]) > dram->size ||
-                    !dt_t8140_in_physical_dram(dram, base, fdt64_to_cpu(reg[1]))) {
+                if (reg_len != 2 * sizeof(*reg) || fdt64_ld(&reg[0]) != base ||
+                    fdt64_ld(&reg[1]) > dram->size ||
+                    !dt_t8140_in_physical_dram(dram, base, fdt64_ld(&reg[1]))) {
                     ret = -1;
                     goto out;
                 }
-                if (fdt64_to_cpu(reg[1]) > size)
-                    size = fdt64_to_cpu(reg[1]);
+                if (fdt64_ld(&reg[1]) > size)
+                    size = fdt64_ld(&reg[1]);
             }
             int region = dt_get_or_add_reserved_mem(name, "apple,firmware-dart-tables", false,
                                                     base, size);
