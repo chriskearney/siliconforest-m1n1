@@ -226,7 +226,7 @@ void m1n1_main(void)
 {
     printf("\n\nm1n1 %s\n", m1n1_version);
     printf("Copyright The Asahi Linux Contributors\n");
-    printf("Licensed under the MIT license\n\n");
+    printf("License notices: LICENSE, LICENSES and 3rdparty_licenses\n\n");
 #ifdef T8140_KIS_PROXY
     printf("KIS carrier: retaining inherited DebugUSB\n");
 #endif
@@ -282,7 +282,6 @@ void m1n1_main(void)
 
 #ifndef J700_CDC_STAGE1
     cpufreq_fixup();
-    sep_init();
 #endif
 #endif
 
@@ -293,6 +292,10 @@ void m1n1_main(void)
 next_stage:
     if (!next_stage.entry) {
         panic("Nothing to do!\n");
+    }
+    if (smp_has_pending_calls()) {
+        next_stage.entry = NULL;
+        panic("Refusing next stage while secondary callbacks are pending\n");
     }
 
     printf("Preparing to run next stage at %p...\n", next_stage.entry);

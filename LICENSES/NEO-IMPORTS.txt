@@ -1,0 +1,39 @@
+SiliconForest Neo source notices
+
+The original MIT copyright notice and terms remain in the root LICENSE.
+Imported contributions retain their own terms; that root file does not replace
+the license of a separately identified contribution.
+
+Files combining inherited MIT source with GPL-2.0-only Aura contributions are
+marked MIT AND GPL-2.0-only. Their MIT portions retain the inherited notice;
+the imported additions retain GPL-2.0-only. The full GPL text is preserved in
+3rdparty_licenses/LICENSE.GPL-2. Tests and third-party components keep their
+individual source notices.
+
+Each carry records its exact public upstream revision and original author.
+Adaptations and newly generated work are identified in the commit history.
+Existing stage-1 configuration and host-wire identifiers remain for ABI
+compatibility; their names do not change authorship or license terms.
+
+Additional carry provenance (the earlier nested cherry-pick identifiers are
+historical identifiers, not assertions of public availability):
+
+- 3e23e37ceb95069153f967b3d5ac1f7ad14c641b, Ryan Murray, DCP transport
+  headers: https://github.com/aurora-silicon/aura/commit/434e46cd884fc838f655760732eee5a09406cd73
+- f0e2059c4a8f31d041b07a593c44c92b0ee0f6cd, Ryan Murray, USB4 import:
+  https://github.com/aurora-silicon/aura/commit/103ba3199596643f87c96d1bf96084da0c00518c
+- 07cc079a3cd37696362d44f46ac95c157b8c7307, Ryan Murray, Rust feature:
+  https://github.com/aurora-silicon/aura/commit/9ef9932f067bb11482a27394e55cde0435c88111
+- caca423162c32433cdc3c02b08bd3ace4d3ad574, Dj, chosen/SEP test:
+  https://github.com/aurora-silicon/aura/commit/65e063ceee96492e5668fb1131c3d52343c10098
+  tests/python/test_chosen_sep_policy.py is copied from this pre-boundary
+  revision, whose LICENSE is MIT; its SPDX identifier follows that revision.
+- 8ec07f42934b36689fd0fb57fa7dbba70eba07f5, Scott Jones, PMGR topology:
+  https://github.com/aurora-silicon/aura/commit/20aefb00f692bf2eea729ded2b5f6d4483421458
+  SiliconForest additionally changed src/pmgr.c from MIT to the mixed
+  MIT AND GPL-2.0-only identifier for its imported GPL contribution. That
+  identifier adjustment is separate from Scott's code change.
+
+Generated branding is a separate, hashed build input. Its export manifest and
+the component licenses accompany the local candidate artifacts. No proprietary
+firmware images, device dumps or private-only source are part of this tree.

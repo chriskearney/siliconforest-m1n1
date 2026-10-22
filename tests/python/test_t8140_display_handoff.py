@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT AND GPL-2.0-only
 """Exercise the T8140 hand-off against measured synthetic DART translations."""
 
 from pathlib import Path
@@ -11,9 +12,14 @@ def test_t8140_display_handoff(tmp_path):
     start = source.index("struct dt_t8140_dram {")
     end = source.index("/* T8142 display carveouts:", start)
     helper = source[start:end]
+    iommu_node = source[source.index("static int dt_get_iommu_node("):
+                        source.index("static dart_dev_t *dt_init_dart_by_node(")]
     asc_source = (repo / "src/asc.c").read_text()
     asc_defs = asc_source[asc_source.index("#define ASC_CPU_CONTROL"):asc_source.index("struct asc_dev {")]
     asc_check = asc_source[asc_source.index("static bool asc_mailbox_empty("):asc_source.index("bool asc_can_recv(")]
+    asc_header = (repo / "src/asc.h").read_text()
+    enum_start = asc_header.index("enum asc_inherited_state {")
+    asc_enum = asc_header[enum_start:asc_header.index("};", enum_start) + 2]
     harness = r'''
 #include <assert.h>
 #include <stdbool.h>
@@ -41,9 +47,9 @@ struct run { u64 iova, size, pa; };
 ''' + asc_defs + r'''
 typedef struct asc_dev { uintptr_t cpu_base, base; } asc_dev_t;
 struct asc_mock {
-    u32 control, status, a2i, i2a;
-    bool stop_on_recheck;
-    unsigned int cpu_reads;
+    u32 control, status, a2i, i2a, recheck_status;
+    bool stop_on_recheck, status_on_recheck;
+    unsigned int cpu_reads, status_reads;
 };
 static struct asc_mock asc_state[2];
 static asc_dev_t asc_devs[2] = {{0x1000, 0x9000}, {0x3000, 0xb000}};
@@ -59,7 +65,11 @@ static u32 read32(uintptr_t addr)
         state->cpu_reads++;
         return state->stop_on_recheck && state->cpu_reads > 1 ? 0 : state->control;
     }
-    if (addr == cpu + ASC_CPU_STATUS) return state->status;
+    if (addr == cpu + ASC_CPU_STATUS) {
+        state->status_reads++;
+        return state->status_on_recheck && state->status_reads > 1 ? state->recheck_status
+                                                                    : state->status;
+    }
     if (addr == box + ASC_MBOX_A2I_CONTROL) return state->a2i;
     if (addr == box + ASC_MBOX_I2A_CONTROL) return state->i2a;
     abort();
@@ -79,7 +89,7 @@ static bool rtkit_quiesce_inherited(asc_dev_t *asc)
     return quiesce_fault != (asc == &asc_devs[1] ? 2 : 1);
 }
 
-''' + asc_check + r'''
+''' + asc_enum + '\n' + asc_check + r'''
 static const struct run dcp[] = {
     {0x11c4000,0xc00000,0x101f0cd4000}, {0x1ddc000,0x4000,0x101f0cd0000},
     {0x1de0000,0xc0000,0x101f0c10000}, {0x1ea0000,0x160000,0x101eb4b8000},
@@ -272,11 +282,7 @@ static int dt_set_dcp_firmware(const char *path)
     (void)path;
     return 0;
 }
-static int dt_get_iommu_node(int node, u32 num)
-{
-    assert(num == 0);
-    return node;
-}
+''' + iommu_node + r'''
 typedef struct {u32 phandle, sid;} dart_dev_t;
 static dart_dev_t mock_dart;
 static dart_dev_t *dart_init_fdt_locked(void *blob, u32 phandle, u32 sid)
@@ -353,15 +359,17 @@ static void setup(void)
         char path[64];
         snprintf(path, sizeof(path), "/soc/%s", refs[i]);
         assert(fdt_setprop_string(dt, fdt_path_offset(dt, "/aliases"), aliases[i], path) == 0);
+        assert(!fdt_setprop_string(dt, fdt_path_offset(dt, path), "compatible",
+                                  i < 2 ? "apple,t8140-dart" : "apple,t8140-asc-mailbox"));
         assert(fdt_setprop_u32(dt, fdt_path_offset(dt, path), "phandle", 100 + i) == 0);
         assert(fdt_setprop_u32(dt, fdt_path_offset(dt, path),
-                               i < 2 ? "#iommu-cells" : "#mbox-cells", 1) == 0);
+                               i < 2 ? "#iommu-cells" : "#mbox-cells", i < 2 ? 1 : 0) == 0);
         assert(fdt_setprop_string(dt, fdt_path_offset(dt, path), "status", "okay") == 0);
     }
     for (int i = 0; i < 2; i++) {
         const char *name = i ? "/soc/dcpext" : "/soc/dcp";
         fdt32_t iommu[] = {cpu_to_fdt32(100 + i), 0};
-        fdt32_t mbox[] = {cpu_to_fdt32(102 + i), 0};
+        fdt32_t mbox[] = {cpu_to_fdt32(102 + i)};
         assert(fdt_setprop(dt, fdt_path_offset(dt, name), "iommus", iommu,
                            sizeof(iommu)) == 0);
         assert(fdt_setprop(dt, fdt_path_offset(dt, i ? "/soc/dispext0" : "/soc/disp0"),
@@ -378,6 +386,8 @@ static void setup(void)
         snprintf(path, sizeof(path), "/soc/%s", dart);
         assert(fdt_setprop_u32(dt, fdt_path_offset(dt, path), "phandle", 104 + i) == 0);
         assert(fdt_setprop_u32(dt, fdt_path_offset(dt, path), "#iommu-cells", 1) == 0);
+        assert(!fdt_setprop_string(dt, fdt_path_offset(dt, path), "compatible", "apple,t8140-dart"));
+        assert(!fdt_setprop_string(dt, fdt_path_offset(dt, path), "status", "okay"));
         fdt32_t iommu[] = {cpu_to_fdt32(104 + i), 0};
         assert(fdt_setprop(dt, fdt_path_offset(dt, display), "iommus", iommu, sizeof(iommu)) == 0);
         iommu[0] = cpu_to_fdt32(100 + i); iommu[1] = cpu_to_fdt32(23);
@@ -398,6 +408,13 @@ static void setup(void)
     }
     assert(fdt_add_subnode(dt, fdt_path_offset(dt, "/soc"), "usb-pd") >= 0);
     assert(fdt_setprop_string(dt, fdt_path_offset(dt, "/soc/usb-pd"), "status", "okay") == 0);
+    int supply = fdt_add_subnode(dt, fdt_path_offset(dt, "/soc"), "external-power");
+    assert(supply >= 0);
+    assert(!fdt_setprop_string(dt, supply, "compatible", "apple,t8140-pmgr-pwrstate"));
+    assert(!fdt_setprop_u32(dt, supply, "phandle", 200));
+    assert(!fdt_setprop_u32(dt, supply, "#power-domain-cells", 0));
+    assert(!fdt_setprop_string(dt, supply, "status", "disabled"));
+    assert(!fdt_setprop_u32(dt, fdt_path_offset(dt, "/soc/dcpext"), "power-domains", 200));
     assert(fdt_add_subnode(dt, fdt_path_offset(dt, "/chosen"), "framebuffer") >= 0);
     cur_boot_args.phys_base = 0x1000342c000;
     cur_boot_args.mem_size = 0x1e39e8000;
@@ -422,6 +439,8 @@ static void setup(void)
             .control = 0x10, .status = 0x6d, .a2i = 0x2ff01, .i2a = 0x28801,
         };
     }
+    /* The external DCP is inherited started but stopped in its idle loop. */
+    asc_state[1].status = 0x6e;
 }
 static void check_claim(bool present)
 {
@@ -489,6 +508,10 @@ int main(void)
     check_status("dcp", "okay");
     check_status("disp0", "okay");
     check_status("dcpext", "okay");
+    const fdt32_t *preflight = fdt_getprop(dt, fdt_path_offset(dt, "/chosen"),
+                                         "asahi,external-display-preflight", NULL);
+    assert(preflight && fdt32_to_cpu(*preflight) == 0x100);
+    check_status("external-power", "okay");
     check_status("dispext0", "disabled");
     assert(reservation_calls == 11);
     assert(fdt_path_offset(dt, "/reserved-memory/framebuffer@101eb4b8000") >= 0);
@@ -499,6 +522,46 @@ int main(void)
     check_status("/soc/dcp/typec-routes/port0", "okay");
     check_status("/soc/dcpext/typec-routes/port0", "okay");
     check_status("/soc/usb-pd", "okay");
+    assert(!dt_t8140_disable_dcpext());
+    check_status("external-power", "disabled");
+    check_status("dcp", "okay");
+
+    setup();
+    assert(!fdt_setprop_u32(dt, fdt_path_offset(dt, "/soc/external-power"),
+                           "power-domains", 200));
+    memcpy(before, dt, sizeof(tree));
+    assert(dt_set_display_t8140() < 0);
+    assert(!memcmp(before, dt, sizeof(tree)));
+
+    /* External admission is exactly started, stopped and idle, at both reads.
+     * The internal DCP keeps its running-only admission. */
+    static const u32 refused_external[] = {
+        0x6d, /* running */
+        0x6c, /* running, idle bit clear */
+        0x4e, /* stopped, not idle */
+        0x02, /* stopped only */
+        0x00, /* neither */
+    };
+    for (size_t i = 0; i < ARRAY_SIZE(refused_external) + 1; i++) {
+        setup();
+        if (i < ARRAY_SIZE(refused_external)) {
+            asc_state[1].status = refused_external[i];
+        } else {
+            asc_state[1].status_on_recheck = true;
+            asc_state[1].recheck_status = 0x6d;
+        }
+        assert(dt_set_display_t8140() == 0);
+        check_status("dcp", "okay");
+        check_status("disp0", "okay");
+        check_status("dcpext", "disabled");
+        check_status("/soc/dcpext/typec-routes/port0", "disabled");
+        check_claim(true);
+    }
+    setup();
+    asc_state[0].status = 0x6e;
+    memcpy(before, dt, sizeof(tree));
+    assert(dt_set_display_t8140() == 0);
+    check_fallback(before);
 
     /* A refused external controller must withdraw only its mode routes. */
     setup();
@@ -512,14 +575,17 @@ int main(void)
     check_status("/soc/dart-dispext", "disabled");
 
 #ifdef HAVE_DISPLAY_RECHECK
-    for (int fault = 0; fault < 5; fault++) {
+    for (int fault = 0; fault < 7; fault++) {
         setup();
         assert(dt_set_display_t8140() == 0);
         if (fault == 0) ext_power = false;
-        if (fault == 1) asc_state[1].status |= BIT(1);
+        if (fault == 1) asc_state[1].status = (asc_state[1].status | BIT(1)) & ~BIT(5);
         if (fault == 2) asc_state[1].i2a |= BIT(18);
         if (fault == 3) asc_state[1].stop_on_recheck = true;
         if (fault == 4) asc_state[1].a2i &= ~BIT(0);
+        /* Running is not the idle state the kernel adopts. */
+        if (fault == 5) asc_state[1].status = 0x6d;
+        if (fault == 6) { asc_state[1].status_on_recheck = true; asc_state[1].recheck_status = 0x6d; }
         assert(dt_t8140_recheck_display() == 0);
         check_status("dcp", "okay");
         check_status("disp0", "okay");
@@ -607,14 +673,17 @@ int main(void)
     check_fallback(before);
     setup();
     assert(fdt_del_node(dt, fdt_path_offset(dt, "/soc/dcp/piodma")) == 0);
-    assert(dt_set_display_t8140() == 0);
-    check_fallback(before);
+    /* Without the internal PIODMA child, refusal cannot attribute the disp0
+     * scanout DART to a controller, so the handoff fails closed. */
+    assert(dt_set_display_t8140() == -1);
     setup();
     fdt32_t malformed_child[] = {cpu_to_fdt32(104)};
     assert(fdt_setprop(dt, fdt_path_offset(dt, "/soc/dcp/piodma"), "iommus",
                        malformed_child, sizeof(malformed_child)) == 0);
+    memcpy(before, dt, sizeof(tree));
+    /* Refusal rejects the malformed reference before any edit. */
     assert(dt_set_display_t8140() == -1);
-    check_claim(false);
+    assert(!memcmp(before, dt, sizeof(tree)));
 
     setup();
     fdt32_t too_large_sid[] = {cpu_to_fdt32(104), cpu_to_fdt32(256)};

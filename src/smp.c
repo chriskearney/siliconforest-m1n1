@@ -887,6 +887,28 @@ int smp_wait(int cpu, u64 *retval)
     return smp_wait_timed(cpu, retval ? retval : &ignored, 300000);
 }
 
+int smp_call_sync0(int cpu, void *func)
+{
+    int dispatched = smp_call4(cpu, func, 0, 0, 0, 0);
+    /* A busy slot can still contain an older callback, so join it too. */
+    int joined = smp_wait(cpu, NULL);
+    if (joined)
+        return joined;
+    /* A missed ACK is harmless only after observing actual completion. */
+    return dispatched == SMP_TIMEOUT ? 0 : dispatched;
+}
+
+bool smp_has_pending_calls(void)
+{
+    sysop("dmb sy");
+    for (int cpu = 0; cpu < MAX_CPUS; cpu++) {
+        if (spin_table[cpu].target)
+            return true;
+    }
+    sysop("dmb sy");
+    return false;
+}
+
 void smp_set_wfe_mode(bool new_mode)
 {
     if (cpu_features->unsafe_wfi && !new_mode) {
