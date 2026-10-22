@@ -266,7 +266,14 @@ int isp_init(void)
         case ISP_VER_T8122:
             switch (os_firmware.version) {
                 case V14_7:
+                    selected_top = 0x1000000;
+                    break;
                 case V26_6_2:
+                    /* Only T8122 has a qualified heap on this firmware. */
+                    if (ver_rev != ISP_VER_T8122) {
+                        reason = "unsupported firmware";
+                        goto out;
+                    }
                     selected_top = 0x1000000;
                     break;
                 default:
