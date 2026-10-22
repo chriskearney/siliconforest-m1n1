@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT AND GPL-2.0-only */
+/* SPDX-License-Identifier: MIT */
 
 #include "adt.h"
 #include "asc.h"

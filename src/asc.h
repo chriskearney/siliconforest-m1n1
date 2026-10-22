@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT AND GPL-2.0-only */
+/* SPDX-License-Identifier: MIT */
 
 #ifndef ASC_H
 #define ASC_H

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT AND GPL-2.0-only
+// SPDX-License-Identifier: MIT
 use core::ffi::*;
 use core::mem::size_of;
 

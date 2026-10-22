@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-2.0-only
+# SPDX-License-Identifier: MIT
 """Run the T8140 display hand-off on the composed J700 device tree.
 
 The committed fixture is the display subgraph of the SiliconForest Linux J700

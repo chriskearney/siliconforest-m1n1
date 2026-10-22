@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-2.0-only
+# SPDX-License-Identifier: MIT
 """Exercise the actual display status reader with bounded FDT properties."""
 
 from pathlib import Path
