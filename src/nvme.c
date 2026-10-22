@@ -777,8 +777,8 @@ static bool nvme_submit_read(u32 nsid, u64 lba, void *buffer, u32 count, u64 prp
 bool nvme_read_blocks(u32 nsid, u64 lba, void *buffer, u32 count)
 {
     if (nvme_reboot_required || !nvme_initialized || ioq.failed || !count ||
-        count > NVME_MAX_READ_BLOCKS ||
-        ((u64)buffer & (SZ_4K - 1)) || lba > UINT64_MAX - (count - 1))
+        count > NVME_MAX_READ_BLOCKS || ((u64)buffer & (SZ_4K - 1)) ||
+        lba > UINT64_MAX - (count - 1))
         return false;
 
     if (count > 1 && nvme_multi_enabled) {

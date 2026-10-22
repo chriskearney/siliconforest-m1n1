@@ -35,6 +35,8 @@ src/pmgr.c
   GPL-2.0-only; his original author and supplied Signed-off-by are retained.
   The recursive power and saved-mode guards are unchanged.
   https://github.com/iconidentify/siliconforest-m1n1/commit/8ec07f42934b36689fd0fb57fa7dbba70eba07f5
+  Original public contribution (compound notice present before and after):
+  https://github.com/omacom/m1n1/commit/20aefb00f692bf2eea729ded2b5f6d4483421458
 
 Other source files, tests and third-party components retain their individual
 notices. This notice does not change runtime behavior, boot artwork or

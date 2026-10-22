@@ -2561,8 +2561,7 @@ static bool dt_t8140_node_enabled(int node)
     const char *status = fdt_getprop(dt, node, "status", &length);
     if (!status)
         return length == -FDT_ERR_NOTFOUND;
-    return (length == 5 && !memcmp(status, "okay", 5)) ||
-           (length == 3 && !memcmp(status, "ok", 3));
+    return (length == 5 && !memcmp(status, "okay", 5)) || (length == 3 && !memcmp(status, "ok", 3));
 }
 
 static int dt_t8140_audit_iommus(int node)
