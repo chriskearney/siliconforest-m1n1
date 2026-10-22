@@ -3923,7 +3923,8 @@ static int dt_set_display_t8140(void)
     if (fdt_setprop_u32(dt, node, "apple,dcp-rtkit-live", 1) < 0)
         goto rollback;
     /* A diagnostic result for this preflight, not a hardware-ready claim.
-     * 0: absent, 1: power off, 2..7: validation stage, 8: dependencies. */
+     * 0: absent, 1: power off, 2..7: validation stage, 8: firmware DART
+     * table reservation, 9: dependencies. */
     if (fdt_setprop_u32(dt, node, "asahi,external-display-preflight", ext_ready ? 0x100 : ext_step))
         printf("FDT: external preflight observation unavailable\n");
     free(saved);

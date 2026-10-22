@@ -525,6 +525,25 @@ int main(int argc, char **argv)
     assert(live_claim() && preflight() == 0x100);
     printf("PASS external published\n");
 
+    /* FDT reg values need only four-byte alignment, including regions
+     * already reserved by an earlier stream. Force that legal layout before
+     * re-running the real existing-reservation merge under UBSan. */
+    u64 table_base = physical_base + ((phandle_of(DCP_DART) & 0xff) * 8 + 23 * 2) * SZ_16K;
+    char table_path[128];
+    snprintf(table_path, sizeof(table_path), "/reserved-memory/dart-tables@%lx", table_base);
+    int table_node = off(table_path), table_len;
+    const fdt64_t *table_reg = fdt_getprop(dt, table_node, "reg", &table_len);
+    assert(table_reg && table_len == 2 * sizeof(*table_reg));
+    if (!((uintptr_t)table_reg & 7))
+        assert(fdt_setprop_empty(dt, table_node, "test-align-padding") == 0);
+    table_reg = fdt_getprop(dt, off(table_path), "reg", &table_len);
+    assert(((uintptr_t)table_reg & 7) == 4);
+    struct dt_t8140_dram dram = {.base = physical_base, .size = physical_size};
+    struct dt_t8140_external_darts ext_darts;
+    assert(dt_t8140_collect_external_darts(&ext_darts) == 0);
+    assert(dt_t8140_reserve_tables("dcp", &dram, &ext_darts, false) == 0);
+    printf("PASS four-byte-aligned existing reservation\n");
+
     /* A running external DCP is refused. The internal display keeps a valid
      * provider group: only the external scanout specifier is withdrawn, and
      * the internal reservation never locks an external DART. */
@@ -670,7 +689,7 @@ int main(int argc, char **argv)
         check=True,
     )
     result = subprocess.run([str(binary), str(dtb)], check=True, capture_output=True, text=True)
-    assert result.stdout.count("PASS ") == 13, result.stdout
+    assert result.stdout.count("PASS ") == 14, result.stdout
 
 
 def test_t8140_display_j700_fixture(tmp_path):
