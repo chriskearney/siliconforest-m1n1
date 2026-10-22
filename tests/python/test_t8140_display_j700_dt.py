@@ -27,7 +27,7 @@ def _run(tmp_path, dtb):
     # Preserve the recipient's separately tested read-only metadata exporter.
     observe_start = helper.index("static void dt_t8140_external_metadata(void)")
     observe_end = helper.index("static int dt_set_display_t8140(void)", observe_start)
-    helper = helper[:observe_start] + "static void dt_t8140_external_metadata(void) {}\n" + helper[observe_end:]
+    helper = helper[:observe_start] + "static unsigned int metadata_calls;\nstatic void dt_t8140_external_metadata(void) { metadata_calls++; }\n" + helper[observe_end:]
     iommu_node = source[source.index("static int dt_get_iommu_node("):
                         source.index("static dart_dev_t *dt_init_dart_by_node(")]
     asc_source = (repo / "src/asc.c").read_text()
@@ -643,6 +643,12 @@ int main(int argc, char **argv)
         {"dcpext", "/soc/dcp@416e00000", 18},
         {"dcpext", "/soc/absent", 0},
         {"dcp", "", 0},
+        {"dcp", DCPEXT, 0},
+        {"dcp", DISPLAY, 0},
+        {"dcpext", DCP, 0},
+        {"dcpext", DISPLAY, 0},
+        {"disp0", DCP, 0},
+        {"disp0", DCPEXT, 0},
     };
     for (size_t i = 0; i < ARRAY_SIZE(bad_aliases); i++) {
         setup(dtb);
@@ -654,13 +660,84 @@ int main(int argc, char **argv)
             assert(!fdt_setprop_string(dt, aliases, bad_aliases[i].name, bad_aliases[i].value));
         if (!strcmp(bad_aliases[i].value, "loop"))
             assert(!fdt_setprop_string(dt, off("/aliases"), "loop", "dcpext"));
+        metadata_calls = 0;
         memcpy(unchanged, tree, sizeof(tree));
         assert(dt_set_display_t8140() == -1);
+        assert(metadata_calls == 0);
         assert(!memcmp(unchanged, tree, sizeof(tree)));
         /* Refused before any reservation reads a DART. */
         assert(n_collected == 0 && reservation_calls == 0);
     }
     printf("PASS display alias contract\n");
+
+    /* A second node of either controller role cannot be selected by alias. */
+    static const char *const duplicate_roles[] = {"apple,t8140-dcp", "apple,t8140-dcpext"};
+    for (size_t i = 0; i < ARRAY_SIZE(duplicate_roles); i++) {
+        setup(dtb);
+        int duplicate = fdt_add_subnode(dt, 0, "duplicate-controller");
+        assert(duplicate >= 0);
+        assert(!fdt_setprop_string(dt, duplicate, "compatible", duplicate_roles[i]));
+        metadata_calls = 0;
+        memcpy(unchanged, tree, sizeof(tree));
+        assert(dt_set_display_t8140() == -1);
+        assert(metadata_calls == 0);
+        assert(!memcmp(unchanged, tree, sizeof(tree)));
+        assert(n_collected == 0 && reservation_calls == 0);
+    }
+    printf("PASS duplicate controller roles refused\n");
+
+    /* The unique internal master is established by its complete IOMMU tuples. */
+    setup(dtb);
+    int tuple_length;
+    const void *tuples = fdt_getprop(dt, off(DISPLAY), "iommus", &tuple_length);
+    assert(tuples && tuple_length > 0 && tuple_length <= 256);
+    unsigned char tuple_copy[256];
+    memcpy(tuple_copy, tuples, tuple_length);
+    int duplicate = fdt_add_subnode(dt, 0, "duplicate-master");
+    assert(duplicate >= 0);
+    assert(!fdt_setprop_string(dt, duplicate, "compatible", "apple,display-subsystem"));
+    assert(!fdt_setprop(dt, off("/duplicate-master"), "iommus", tuple_copy, tuple_length));
+    metadata_calls = 0;
+    memcpy(unchanged, tree, sizeof(tree));
+    assert(dt_set_display_t8140() == -1);
+    assert(metadata_calls == 0);
+    assert(!memcmp(unchanged, tree, sizeof(tree)));
+    assert(n_collected == 0 && reservation_calls == 0);
+    printf("PASS duplicate internal master refused\n");
+
+    /* A well-formed alias to an external-only master is still the wrong role. */
+    setup(dtb);
+    tuples = fdt_getprop(dt, off(DCPEXT "/piodma"), "iommus", &tuple_length);
+    assert(tuples && tuple_length > 0 && tuple_length <= 256);
+    memcpy(tuple_copy, tuples, tuple_length);
+    int external_master = fdt_add_subnode(dt, 0, "external-master");
+    assert(external_master >= 0);
+    assert(!fdt_setprop_string(dt, external_master, "compatible", "apple,display-subsystem"));
+    assert(!fdt_setprop(dt, off("/external-master"), "iommus", tuple_copy, tuple_length));
+    /* The unrelated external-only master does not make the internal role ambiguous. */
+    assert(dt_t8140_display_alias_roles() == 0);
+    assert(!fdt_setprop_string(dt, off("/aliases"), "disp0", "/external-master"));
+    metadata_calls = 0;
+    memcpy(unchanged, tree, sizeof(tree));
+    assert(dt_set_display_t8140() == -1);
+    assert(metadata_calls == 0);
+    assert(!memcmp(unchanged, tree, sizeof(tree)));
+    assert(n_collected == 0 && reservation_calls == 0);
+    printf("PASS external-only master cannot impersonate internal\n");
+
+    /* One node cannot fill both controller roles. */
+    setup(dtb);
+    assert(!fdt_del_node(dt, off(DCPEXT)));
+    static const char both_roles[] = "apple,t8140-dcp\0apple,t8140-dcpext";
+    assert(!fdt_setprop(dt, off(DCP), "compatible", both_roles, sizeof(both_roles)));
+    assert(!fdt_setprop_string(dt, off("/aliases"), "dcpext", DCP));
+    metadata_calls = 0;
+    memcpy(unchanged, tree, sizeof(tree));
+    assert(dt_set_display_t8140() == -1);
+    assert(metadata_calls == 0);
+    assert(!memcmp(unchanged, tree, sizeof(tree)));
+    assert(n_collected == 0 && reservation_calls == 0);
+    printf("PASS controller roles must be distinct\n");
 
     /* An absolute external alias names the same controller. */
     setup(dtb);
@@ -690,7 +767,7 @@ int main(int argc, char **argv)
     )
     result = subprocess.run([str(binary), str(dtb)], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert result.stdout.count("PASS ") == 14, result.stdout
+    assert result.stdout.count("PASS ") == 18, result.stdout
 
 
 def test_t8140_display_j700_fixture(tmp_path):

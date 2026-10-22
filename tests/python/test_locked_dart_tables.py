@@ -65,9 +65,24 @@ static void setup(void){
 }
 static int collect(size_t capacity){return dart_collect_locked_tables(&dart,base,4*SZ_16K,pages,capacity,&count);}
 static void refuse(void){assert(collect(4)==-1 && count==0);}
+/* A portable address hint never overwrites an existing mapping. Refuse a
+ * different returned address because the synthetic DART encodes this base. */
+static void *map_exact_no_clobber(void *address, size_t length)
+{
+ void *mapped=mmap(address,length,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0);
+ if(mapped!=MAP_FAILED && mapped!=address){
+  assert(munmap(mapped,length)==0);
+  return MAP_FAILED;
+ }
+ return mapped;
+}
 int main(void){
- root=mmap((void *)base,4*SZ_16K,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_FIXED_NOREPLACE,-1,0);
+ root=map_exact_no_clobber((void *)base,4*SZ_16K);
  assert(root==(void *)base);
+ /* An occupied hint must be refused without overwriting the original page. */
+ root[0]=0x5a5aa5a5;
+ assert(map_exact_no_clobber(root,4*SZ_16K)==MAP_FAILED);
+ assert(root[0]==0x5a5aa5a5);
  setup();root[0]=entry(base+SZ_16K);root[2047]=entry(base+2*SZ_16K);root[9]=root[0];
  assert(collect(3)==0 && count==3 && pages[0]==base && pages[1]==base+SZ_16K && pages[2]==base+2*SZ_16K);
  setup();root[0]=entry(base+SZ_16K);assert(collect(1)==-1 && count==0);

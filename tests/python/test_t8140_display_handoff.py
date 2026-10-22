@@ -818,8 +818,9 @@ int main(void)
     setup();
     assert(fdt_delprop(dt, fdt_path_offset(dt, "/aliases"), "dcp") == 0);
     memcpy(before, dt, sizeof(tree));
-    assert(dt_set_display_t8140() == 0);
-    check_fallback(before);
+    /* Missing roles now refuse before any publication or withdrawal. */
+    assert(dt_set_display_t8140() == -1);
+    assert(!memcmp(before, dt, sizeof(tree)));
 
     setup();
     assert(fdt_delprop(dt, fdt_path_offset(dt, "/aliases"), "dcpext") == 0);
