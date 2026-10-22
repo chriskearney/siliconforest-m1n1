@@ -2546,6 +2546,14 @@ static int dt_t8140_reserve_data(const char *dcp_path, const char *nub_path, con
     return dt_add_reserved_regions(dcp_path, NULL, NULL, "apple,asc-mem", maps, regions, 2);
 }
 
+/* The DART helpers below read each specifier as <phandle stream>: require that width. */
+static bool dt_t8140_one_cell_iommu(int provider)
+{
+    int len;
+    const fdt32_t *cells = fdt_getprop(dt, provider, "#iommu-cells", &len);
+    return cells && len == sizeof(*cells) && fdt32_to_cpu(*cells) == 1;
+}
+
 /* A display DART is published only with its firmware tables reserved. */
 static bool dt_t8140_dart_handed_off(int dart)
 {
@@ -2574,7 +2582,8 @@ static int dt_t8140_audit_iommus(int node)
         return -1;
     for (int i = 0; i < len / (int)sizeof(*refs); i += 2) {
         int dart = fdt_node_offset_by_phandle(dt, fdt32_to_cpu(refs[i]));
-        if (dart < 0 || !dt_t8140_node_enabled(dart) || !dt_t8140_dart_handed_off(dart))
+        if (dart < 0 || !dt_t8140_one_cell_iommu(dart) || !dt_t8140_node_enabled(dart) ||
+            !dt_t8140_dart_handed_off(dart))
             return -1;
     }
     return 0;
@@ -2721,6 +2730,9 @@ static int dt_t8140_collect_external_darts(struct dt_t8140_external_darts *ext)
             return -1;
         for (int i = 0; i < len / (int)sizeof(*refs); i += 2) {
             u32 phandle = fdt32_to_cpu(refs[i]);
+            int provider = fdt_node_offset_by_phandle(dt, phandle);
+            if (provider < 0 || !dt_t8140_one_cell_iommu(provider))
+                return -1;
             size_t j = 0;
             while (j < ext->count && ext->phandles[j] != phandle)
                 j++;
@@ -2757,7 +2769,9 @@ static int dt_t8140_reserve_tables(const char *alias, const struct dt_t8140_dram
     int ret = -1;
     for (int i = 0; i < len / (int)sizeof(*prop); i += 2) {
         ret = -1;
-        if (fdt32_to_cpu(iommus[i + 1]) >= 256)
+        int provider = fdt_node_offset_by_phandle(dt, fdt32_to_cpu(iommus[i]));
+        if (provider < 0 || !dt_t8140_one_cell_iommu(provider) ||
+            fdt32_to_cpu(iommus[i + 1]) >= 256)
             goto out;
         if (dt_t8140_external_dart(ext, fdt32_to_cpu(iommus[i])) != external)
             continue;

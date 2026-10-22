@@ -544,6 +544,29 @@ int main(int argc, char **argv)
     assert(dt_t8140_reserve_tables("dcp", &dram, &ext_darts, false) == 0);
     printf("PASS four-byte-aligned existing reservation\n");
 
+    /* The DART helpers read <phandle stream> pairs; a wider provider fails closed. */
+    static const char *const one_cell[] = {DISP_DART, EXT_DART, DCP_DART};
+    for (size_t i = 0; i < ARRAY_SIZE(one_cell); i++) {
+        setup(dtb);
+        if (i == 0) {
+            /* A published display audits clean until its DART widens. */
+            assert(dt_set_display_t8140() == 0);
+            assert(dt_t8140_audit_iommus(off(DISPLAY)) == 0);
+        }
+        assert(!fdt_setprop_u32(dt, off(one_cell[i]), "#iommu-cells", 2));
+        n_collected = 0;
+        if (i == 0)
+            assert(dt_t8140_audit_iommus(off(DISPLAY)) == -1);
+        if (i == 1)
+            assert(dt_t8140_collect_external_darts(&ext_darts) == -1);
+        if (i == 2) {
+            ext_darts.count = 0;
+            assert(dt_t8140_reserve_tables("dcp", &dram, &ext_darts, false) == -1);
+        }
+        assert(n_collected == 0);
+    }
+    printf("PASS two-cell DART specifiers fail closed\n");
+
     /* A running external DCP is refused. The internal display keeps a valid
      * provider group: only the external scanout specifier is withdrawn, and
      * the internal reservation never locks an external DART. */
@@ -878,7 +901,7 @@ int main(int argc, char **argv)
     )
     result = subprocess.run([str(binary), str(dtb)], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert result.stdout.count("PASS ") == 23, result.stdout
+    assert result.stdout.count("PASS ") == 24, result.stdout
 
 
 def test_t8140_display_j700_fixture(tmp_path):
