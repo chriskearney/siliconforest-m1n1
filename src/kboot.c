@@ -3191,47 +3191,6 @@ static int dt_t8140_unique_controller(const char *compatible)
     return node;
 }
 
-/* Validate roles before metadata export, reservation or DART access. A master
- * belongs to the internal display through its scanout IOMMU references, not
- * through its name. A separate external-only master remains valid. */
-static int dt_t8140_display_alias_roles(void)
-{
-    int internal = dt_t8140_unique_controller("apple,t8140-dcp");
-    int external = dt_t8140_unique_controller("apple,t8140-dcpext");
-    int alias = dt_t8140_alias_offset("dcpext");
-    if (internal < 0 || internal == external || dt_t8140_alias_offset("dcp") != internal ||
-        (external < 0 && external != -FDT_ERR_NOTFOUND) ||
-        (alias != -FDT_ERR_NOTFOUND && (alias < 0 || alias != external)))
-        return -1;
-
-    int piodma = fdt_subnode_offset(dt, internal, "piodma");
-    int scanout[64];
-    int count = piodma < 0 ? -1 : dt_t8140_ref_nodes(piodma, "iommus", "#iommu-cells", scanout);
-    if (count <= 0)
-        return -1;
-
-    int master = -FDT_ERR_NOTFOUND;
-    int node = -1;
-    while ((node = fdt_node_offset_by_compatible(dt, node, "apple,display-subsystem")) >= 0) {
-        int refs[64];
-        int nrefs = dt_t8140_ref_nodes(node, "iommus", "#iommu-cells", refs);
-        if (nrefs < 0)
-            return -1;
-        bool owned = false;
-        for (int i = 0; i < nrefs; i++)
-            for (int j = 0; j < count; j++)
-                owned |= refs[i] == scanout[j];
-        if (owned) {
-            if (master >= 0)
-                return -1;
-            master = node;
-        }
-    }
-    if (node != -FDT_ERR_NOTFOUND || master < 0 || dt_t8140_alias_offset("disp0") != master)
-        return -1;
-    return 0;
-}
-
 static int dt_t8140_refusal_group(const char *compatible, struct dt_t8140_refusal_group *group)
 {
     memset(group, 0, sizeof(*group));
@@ -3552,6 +3511,47 @@ static int dt_t8140_refuse_display(void)
 
 /* A bounded observation of register descriptions, not firmware contents.
  * IDs and lengths make absent Linux aliases diagnosable without exporting ADT. */
+/* Validate roles before metadata export, reservation or DART access. A master
+ * belongs to the internal display through its scanout IOMMU references, not
+ * through its name. A separate external-only master remains valid. */
+static int dt_t8140_display_alias_roles(void)
+{
+    int internal = dt_t8140_unique_controller("apple,t8140-dcp");
+    int external = dt_t8140_unique_controller("apple,t8140-dcpext");
+    int alias = dt_t8140_alias_offset("dcpext");
+    if (internal < 0 || internal == external || dt_t8140_alias_offset("dcp") != internal ||
+        (external < 0 && external != -FDT_ERR_NOTFOUND) ||
+        (alias != -FDT_ERR_NOTFOUND && (alias < 0 || alias != external)))
+        return -1;
+
+    int piodma = fdt_subnode_offset(dt, internal, "piodma");
+    int scanout[64];
+    int count = piodma < 0 ? -1 : dt_t8140_ref_nodes(piodma, "iommus", "#iommu-cells", scanout);
+    if (count <= 0)
+        return -1;
+
+    int master = -FDT_ERR_NOTFOUND;
+    int node = -1;
+    while ((node = fdt_node_offset_by_compatible(dt, node, "apple,display-subsystem")) >= 0) {
+        int refs[64];
+        int nrefs = dt_t8140_ref_nodes(node, "iommus", "#iommu-cells", refs);
+        if (nrefs < 0)
+            return -1;
+        bool owned = false;
+        for (int i = 0; i < nrefs; i++)
+            for (int j = 0; j < count; j++)
+                owned |= refs[i] == scanout[j];
+        if (owned) {
+            if (master >= 0)
+                return -1;
+            master = node;
+        }
+    }
+    if (node != -FDT_ERR_NOTFOUND || master < 0 || dt_t8140_alias_offset("disp0") != master)
+        return -1;
+    return 0;
+}
+
 static void dt_t8140_external_metadata(void)
 {
     static const char *const paths[] = {
