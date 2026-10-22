@@ -818,9 +818,11 @@ int main(void)
     setup();
     assert(fdt_delprop(dt, fdt_path_offset(dt, "/aliases"), "dcp") == 0);
     memcpy(before, dt, sizeof(tree));
-    /* Missing roles now refuse before any publication or withdrawal. */
-    assert(dt_set_display_t8140() == -1);
-    assert(!memcmp(before, dt, sizeof(tree)));
+    /* Without its dcp alias the tree does not describe the display: keep simplefb. */
+    assert(dt_set_display_t8140() == 0);
+    check_fallback(before);
+    assert(!strcmp(fdt_getprop(dt, fdt_path_offset(dt, "/chosen"), "apple,dcp-handoff-reason", NULL),
+                   "FDT dcp alias absent"));
 
     setup();
     assert(fdt_delprop(dt, fdt_path_offset(dt, "/aliases"), "dcpext") == 0);

@@ -715,7 +715,8 @@ int main(int argc, char **argv)
     assert(!fdt_setprop_string(dt, external_master, "compatible", "apple,display-subsystem"));
     assert(!fdt_setprop(dt, off("/external-master"), "iommus", tuple_copy, tuple_length));
     /* The unrelated external-only master does not make the internal role ambiguous. */
-    assert(dt_t8140_display_alias_roles() == 0);
+    const char *absent = NULL;
+    assert(dt_t8140_display_alias_roles(&absent) == 0 && !absent);
     assert(!fdt_setprop_string(dt, off("/aliases"), "disp0", "/external-master"));
     metadata_calls = 0;
     memcpy(unchanged, tree, sizeof(tree));
@@ -747,6 +748,116 @@ int main(int argc, char **argv)
     expect_display_iommus(true);
     assert(live_claim() && preflight() == 0x100);
     printf("PASS absolute external alias\n");
+
+    /* A tree that does not describe the internal display keeps simplefb, as
+     * before the role check: the handoff is refused, nothing is reserved and
+     * no DART is read. */
+    const struct {
+        const char *const *nodes, *const *aliases, *reason;
+    } absent_cases[] = {
+        {(const char *const[]){NULL}, (const char *const[]){"dcp", NULL}, "FDT dcp alias absent"},
+        {(const char *const[]){NULL}, (const char *const[]){"disp0", NULL},
+         "FDT disp0 alias absent"},
+        {(const char *const[]){DCP, DCPEXT, DISPLAY, NULL},
+         (const char *const[]){"dcp", "disp0", "disp0-piodma", NULL}, "FDT T8140 DCP absent"},
+    };
+    for (size_t i = 0; i < ARRAY_SIZE(absent_cases); i++) {
+        setup(dtb);
+        for (const char *const *n = absent_cases[i].nodes; *n; n++)
+            assert(!fdt_del_node(dt, off(*n)));
+        for (const char *const *a = absent_cases[i].aliases; *a; a++)
+            assert(!fdt_delprop(dt, off("/aliases"), *a));
+        metadata_calls = 0;
+        assert(dt_set_display_t8140() == 0);
+        assert(metadata_calls == 1);
+        assert(n_collected == 0 && reservation_calls == 0);
+        assert(!live_claim());
+        const char *why = fdt_getprop(dt, off("/chosen"), "apple,dcp-handoff-reason", NULL);
+        assert(why && !strcmp(why, absent_cases[i].reason));
+        static const char *const owned[] = {DCP, DCPEXT, DISPLAY, DCP_DART, DISP_DART,
+                                            EXT_DART, DISPEXT_DART};
+        for (size_t j = 0; j < ARRAY_SIZE(owned); j++)
+            if (fdt_path_offset(dt, owned[j]) >= 0)
+                expect(owned[j], "disabled");
+        assert(!marked(DCP_DART) && !marked(DISP_DART));
+    }
+    printf("PASS absent display keeps simplefb\n");
+
+    /* Removing the nodes but keeping their aliases is not an absent display:
+     * the aliases no longer name a node, so the handoff fails closed. */
+    setup(dtb);
+    assert(!fdt_del_node(dt, off(DCPEXT)));
+    assert(!fdt_del_node(dt, off(DISPLAY)));
+    assert(!fdt_del_node(dt, off(DCP)));
+    metadata_calls = 0;
+    memcpy(unchanged, tree, sizeof(tree));
+    assert(dt_set_display_t8140() == -1);
+    assert(metadata_calls == 0);
+    assert(!memcmp(unchanged, tree, sizeof(tree)));
+    printf("PASS dangling display aliases fail closed\n");
+
+    /* An absent internal description does not excuse an inconsistent part that is present. */
+    const struct {
+        const char *name, *value;
+    } bad_parts[] = {
+        {"dcpext", "dcpext"}, {"dcpext", "/soc/absent"}, {"dcpext", DISPLAY},
+        {"disp0", DCPEXT},    {"duplicate", NULL},
+    };
+    for (int without_controller = 0; without_controller < 2; without_controller++) {
+        for (size_t i = 0; i < ARRAY_SIZE(bad_parts); i++) {
+            setup(dtb);
+            int aliases = off("/aliases");
+            assert(!fdt_delprop(dt, aliases, "dcp"));
+            if (without_controller) {
+                assert(!fdt_delprop(dt, off("/aliases"), "disp0-piodma"));
+                assert(!fdt_del_node(dt, off(DCP)));
+            }
+            if (bad_parts[i].value) {
+                assert(!fdt_setprop_string(dt, off("/aliases"), bad_parts[i].name,
+                                           bad_parts[i].value));
+            } else {
+                int second = fdt_add_subnode(dt, 0, "second-external");
+                assert(second >= 0);
+                assert(!fdt_setprop_string(dt, second, "compatible", "apple,t8140-dcpext"));
+            }
+            metadata_calls = 0;
+            memcpy(unchanged, tree, sizeof(tree));
+            assert(dt_set_display_t8140() == -1);
+            assert(metadata_calls == 0);
+            assert(!memcmp(unchanged, tree, sizeof(tree)));
+            assert(n_collected == 0 && reservation_calls == 0);
+        }
+    }
+    printf("PASS absent internal display with inconsistent parts fails closed\n");
+
+    /* Without the internal PIODMA child the scanout owner is unknown. */
+    setup(dtb);
+    assert(!fdt_del_node(dt, off(DCP "/piodma")));
+    memcpy(unchanged, tree, sizeof(tree));
+    assert(dt_set_display_t8140() == -1);
+    assert(!memcmp(unchanged, tree, sizeof(tree)));
+    printf("PASS missing internal PIODMA fails closed\n");
+
+    /* A controller without a display pipeline: no PIODMA scanout, no master, no disp0. */
+    for (int keep_piodma = 0; keep_piodma < 2; keep_piodma++) {
+        setup(dtb);
+        if (keep_piodma)
+            assert(!fdt_delprop(dt, off(DCP "/piodma"), "iommus"));
+        else
+            assert(!fdt_del_node(dt, off(DCP "/piodma")));
+        assert(!fdt_del_node(dt, off(DISPLAY)));
+        assert(!fdt_delprop(dt, off("/aliases"), "disp0"));
+        if (!keep_piodma)
+            assert(!fdt_delprop(dt, off("/aliases"), "disp0-piodma"));
+        metadata_calls = 0;
+        assert(dt_set_display_t8140() == 0);
+        assert(metadata_calls == 1 && n_collected == 0 && reservation_calls == 0);
+        const char *why = fdt_getprop(dt, off("/chosen"), "apple,dcp-handoff-reason", NULL);
+        assert(why && !strcmp(why, "FDT disp0 alias absent"));
+        expect(DCP, "disabled");
+        assert(!live_claim());
+    }
+    printf("PASS controller without a display pipeline keeps simplefb\n");
     return 0;
 }
 
@@ -767,7 +878,7 @@ int main(int argc, char **argv)
     )
     result = subprocess.run([str(binary), str(dtb)], capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert result.stdout.count("PASS ") == 18, result.stdout
+    assert result.stdout.count("PASS ") == 23, result.stdout
 
 
 def test_t8140_display_j700_fixture(tmp_path):

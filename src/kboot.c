@@ -3510,22 +3510,54 @@ static int dt_t8140_refuse_display(void)
 
 /* Validate roles before metadata export, reservation or DART access. A master
  * belongs to the internal display through its scanout IOMMU references, not
- * through its name. A separate external-only master remains valid. */
-static int dt_t8140_display_alias_roles(void)
+ * through its name. A separate external-only master remains valid.
+ *
+ * Each alias the handoff follows must name one absolute path: libfdt follows
+ * a relative alias recursively. Only the external controller's alias is
+ * optional.
+ *
+ * Returns 1, and sets *absent, when the tree does not describe the internal
+ * display: no internal controller, or no dcp or disp0 alias. The caller keeps
+ * simplefb then. Returns -1 when a description is present but inconsistent. */
+static int dt_t8140_display_alias_roles(const char **absent)
 {
     int internal = dt_t8140_unique_controller("apple,t8140-dcp");
     int external = dt_t8140_unique_controller("apple,t8140-dcpext");
+    int dcp = dt_t8140_alias_offset("dcp");
+    int disp0 = dt_t8140_alias_offset("disp0");
     int alias = dt_t8140_alias_offset("dcpext");
-    if (internal < 0 || internal == external || dt_t8140_alias_offset("dcp") != internal ||
-        (external < 0 && external != -FDT_ERR_NOTFOUND) ||
-        (alias != -FDT_ERR_NOTFOUND && (alias < 0 || alias != external)))
+    /* Whatever is present must be consistent, absent parts or not. */
+    if ((internal < 0 && internal != -FDT_ERR_NOTFOUND) ||
+        (external < 0 && external != -FDT_ERR_NOTFOUND) || (dcp < 0 && dcp != -FDT_ERR_NOTFOUND) ||
+        (disp0 < 0 && disp0 != -FDT_ERR_NOTFOUND) || (alias < 0 && alias != -FDT_ERR_NOTFOUND) ||
+        (internal >= 0 && internal == external) || (dcp >= 0 && dcp != internal) ||
+        (alias >= 0 && alias != external) ||
+        (disp0 >= 0 && fdt_node_check_compatible(dt, disp0, "apple,display-subsystem")))
         return -1;
+    if (internal == -FDT_ERR_NOTFOUND) {
+        *absent = "FDT T8140 DCP absent";
+        return 1;
+    }
+    if (dcp == -FDT_ERR_NOTFOUND) {
+        *absent = "FDT dcp alias absent";
+        return 1;
+    }
 
     int piodma = fdt_subnode_offset(dt, internal, "piodma");
-    int scanout[64];
-    int count = piodma < 0 ? -1 : dt_t8140_ref_nodes(piodma, "iommus", "#iommu-cells", scanout);
-    if (count <= 0)
+    if (piodma < 0 && piodma != -FDT_ERR_NOTFOUND)
         return -1;
+    int scanout[64];
+    int count = piodma < 0 ? 0 : dt_t8140_ref_nodes(piodma, "iommus", "#iommu-cells", scanout);
+    if (count < 0)
+        return -1;
+    /* Without a scanout reference or a disp0 alias, the tree describes no display pipeline. */
+    if (!count) {
+        if (disp0 == -FDT_ERR_NOTFOUND) {
+            *absent = "FDT disp0 alias absent";
+            return 1;
+        }
+        return -1;
+    }
 
     int master = -FDT_ERR_NOTFOUND;
     int node = -1;
@@ -3544,7 +3576,13 @@ static int dt_t8140_display_alias_roles(void)
             master = node;
         }
     }
-    if (node != -FDT_ERR_NOTFOUND || master < 0 || dt_t8140_alias_offset("disp0") != master)
+    if (node != -FDT_ERR_NOTFOUND)
+        return -1;
+    if (disp0 == -FDT_ERR_NOTFOUND) {
+        *absent = "FDT disp0 alias absent";
+        return 1;
+    }
+    if (master < 0 || disp0 != master)
         return -1;
     return 0;
 }
@@ -3675,14 +3713,18 @@ static void dt_t8140_external_metadata(void)
 
 static int dt_set_display_t8140(void)
 {
-    if (dt_t8140_display_alias_roles()) {
-        printf("FDT: T8140 display aliases do not identify unique display roles\n");
-        return -1;
-    }
-    dt_t8140_external_metadata();
     int ret = -1;
     const char *reason = "validation failed";
     const char *step = "preflight";
+    int roles = dt_t8140_display_alias_roles(&reason);
+    if (roles < 0) {
+        printf("FDT: T8140 display aliases do not identify unique display roles\n");
+        return -1;
+    }
+    /* The observation also diagnoses a tree that describes no display. */
+    dt_t8140_external_metadata();
+    if (roles)
+        goto refuse;
     u64 base, size, end, fb_size;
     struct dt_t8140_dram dram = {0};
     int adt_path[4];
@@ -3780,21 +3822,6 @@ static int dt_set_display_t8140(void)
     }
     if (!segment_found) {
         reason = "DCP nub has no segment matching /vram";
-        goto refuse;
-    }
-
-    /* Each alias this handoff follows must name one absolute path before any
-     * helper resolves it: libfdt follows a relative alias recursively. Only
-     * the external controller's alias is optional. */
-    static const char *const followed[] = {"dcp", "disp0", "dcpext"};
-    for (size_t i = 0; i < ARRAY_SIZE(followed); i++) {
-        int alias = dt_t8140_alias_offset(followed[i]);
-        if (alias >= 0 || (alias == -FDT_ERR_NOTFOUND && i == 2))
-            continue;
-        if (alias != -FDT_ERR_NOTFOUND)
-            reason = "FDT display alias is not a single absolute path";
-        else
-            reason = i ? "FDT disp0 alias absent" : "FDT dcp alias absent";
         goto refuse;
     }
 
