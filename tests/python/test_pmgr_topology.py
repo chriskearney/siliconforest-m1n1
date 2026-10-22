@@ -67,7 +67,8 @@ static int adt_get_reg(const void *a, const int *path, const char *prop, int idx
     *addr = 0x2d0000000;
     return 0;
 }
-static u32 read32(uintptr_t addr) { return 0; }
+static u32 read_value;
+static u32 read32(uintptr_t addr) { return read_value; }
 static void write32(uintptr_t addr, u32 v) {}
 static u32 mask32(uintptr_t addr, u32 clear, u32 set) { return 0; }
 static u32 set32(uintptr_t addr, u32 set) { return 0; }
@@ -110,6 +111,18 @@ int main(void)
     device(0, 80, 0, 0, "USB");
     device(1, 293, 81, 0x10, "C0-USBCTL-V");
     assert(init(2) == 0);
+
+    /* Initialization tolerance is not authority to power an unknown parent. */
+    assert(pmgr_power_enable(293) == -1);
+    struct pmgr_saved_modes saved = {0};
+    assert(pmgr_save_parents(0, 293, &saved, 0) == -1);
+    assert(saved.count == 0);
+
+    /* An already-active real orphan still fails the later reconciliation. */
+    device(1, 293, 81, 0, "ACTIVE_ORPHAN");
+    read_value = PMGR_PS_ACTIVE;
+    assert(init(2) == -1);
+    read_value = 0;
 
     /* A complete table still passes. */
     device(0, 1, 0, 0, "A");
