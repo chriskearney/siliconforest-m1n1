@@ -3790,8 +3790,6 @@ static int dt_t8140_refuse_display(void)
     return 0;
 }
 
-/* A bounded observation of register descriptions, not firmware contents.
- * IDs and lengths make absent Linux aliases diagnosable without exporting ADT. */
 /* Validate roles before metadata export, reservation or DART access. A master
  * belongs to the internal display through its scanout IOMMU references, not
  * through its name. A separate external-only master remains valid. */
@@ -3833,6 +3831,8 @@ static int dt_t8140_display_alias_roles(void)
     return 0;
 }
 
+/* A bounded observation of register descriptions, not firmware contents.
+ * IDs and lengths make absent Linux aliases diagnosable without exporting ADT. */
 static void dt_t8140_external_metadata(void)
 {
     static const char *const paths[] = {

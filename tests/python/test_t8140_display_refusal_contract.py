@@ -22,7 +22,7 @@ def refusal_binary(tmp_path):
     handed = source[source.index("/* A display DART is published only"):
                     source.index("static bool dt_t8140_node_enabled(")]
     helpers = handed + source[source.index("static int dt_t8140_disable_refs("):
-                     source.index("/* A bounded observation of register descriptions")]
+                     source.index("/* Validate roles before metadata export")]
     harness = r'''
 #include <assert.h>
 #include <stdbool.h>
