@@ -872,6 +872,10 @@ int smp_wait_timed(int cpu, u64 *retval, u32 timeout_ms)
     while (target->target) {
         sysop("dmb sy");
         if (ticks_to_msecs(get_ticks() - started) >= timeout_ms) {
+            /* A call that completed by the deadline is complete. */
+            sysop("dmb sy");
+            if (!target->target)
+                break;
             printf("SMP: CPU %d call did not complete\n", cpu);
             return SMP_TIMEOUT;
         }
@@ -889,9 +893,15 @@ int smp_wait(int cpu, u64 *retval)
 
 int smp_call_sync0(int cpu, void *func)
 {
+    /*
+     * The setup callbacks joined here finish in microseconds. A second after the ACK window is
+     * ample, and keeps a stuck secondary from adding minutes to the boot before it is refused.
+     */
+    const u32 join_ms = 1000;
+    u64 ignored;
     int dispatched = smp_call4(cpu, func, 0, 0, 0, 0);
     /* A busy slot can still contain an older callback, so join it too. */
-    int joined = smp_wait(cpu, NULL);
+    int joined = smp_wait_timed(cpu, &ignored, join_ms);
     if (joined)
         return joined;
     /* A missed ACK is harmless only after observing actual completion. */

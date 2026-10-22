@@ -102,6 +102,17 @@ int main(void)
     complete_after = 0;
     assert(smp_call_sync0(1, callback) == -1); /* Busy request joined, not dispatched. */
     assert(!smp_has_pending_calls());
+
+    /* A stuck secondary is refused after the 1 s ACK window and a 1 s join, not minutes. */
+    complete = false;
+    ticks = 0;
+    assert(smp_call_sync0(1, callback) == SMP_TIMEOUT);
+    assert(ticks <= 5000);
+    /* It still completes later, and is joined then. */
+    complete = true;
+    complete_after = 0;
+    assert(smp_wait(1, &result) == 0);
+    assert(!smp_has_pending_calls());
     return 0;
 }
 '''
@@ -126,6 +137,7 @@ def test_internal_callers_stop_on_failure(tmp_path):
 #include <stdio.h>
 #include <string.h>
 typedef uint64_t u64;
+typedef uint32_t u32;
 #define MAX_CPUS 4
 #define SMP_TIMEOUT -2
 #define BIT(n) (1ULL << (n))
@@ -162,6 +174,9 @@ static int smp_call4(int cpu, void *fn, u64 a, u64 b, u64 c, u64 d)
 }
 static int smp_wait(int cpu, u64 *result)
 { return ++waits == fail_wait ? SMP_TIMEOUT : 0; }
+/* Setup calls are joined for at most a second, not smp_wait()'s minutes. */
+static int smp_wait_timed(int cpu, u64 *result, u32 timeout_ms)
+{ assert(timeout_ms <= 1000); return smp_wait(cpu, result); }
 ''' + mmu + sync + mitigation + hv + watchdog + r'''
 static void reset(void)
 {
