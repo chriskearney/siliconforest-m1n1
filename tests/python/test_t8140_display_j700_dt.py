@@ -688,7 +688,8 @@ int main(int argc, char **argv)
          str(source_file), *map(str, sources), "-o", str(binary)],
         check=True,
     )
-    result = subprocess.run([str(binary), str(dtb)], check=True, capture_output=True, text=True)
+    result = subprocess.run([str(binary), str(dtb)], capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr
     assert result.stdout.count("PASS ") == 14, result.stdout
 
 
