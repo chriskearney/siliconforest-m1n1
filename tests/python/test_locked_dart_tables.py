@@ -51,7 +51,7 @@ static u32 read32(unsigned address) {
  return (++ttbr_reads==2 && changed_ttbr)?ttbr^4:ttbr;
 }
 ''' + bodies + r'''
-static const u64 base=0x100000000;
+static u64 base;
 static u64 *root;
 static struct params params={1};
 static dart_dev_t dart;
@@ -77,8 +77,24 @@ static void *map_exact_no_clobber(void *address, size_t length)
  return mapped;
 }
 int main(void){
- root=map_exact_no_clobber((void *)base,4*SZ_16K);
- assert(root==(void *)base);
+ /* Mach-O may already occupy 4 GiB. Search bounded, representable page
+  * addresses without replacing any mapping. Keep the first candidate busy
+  * when possible, so Linux also exercises the occupied-address fallback. */
+ const u64 first=0x100000000;
+ u64 *guard=map_exact_no_clobber((void *)first,4*SZ_16K);
+ if(guard!=MAP_FAILED)guard[0]=0x1234abcd;
+ root=MAP_FAILED;
+ for(unsigned int i=0;i<64;i++){
+  base=first+(u64)i*0x10000000;
+  root=map_exact_no_clobber((void *)base,4*SZ_16K);
+  if(root!=MAP_FAILED)break;
+ }
+ assert(root!=MAP_FAILED && root==(void *)base);
+ if(guard!=MAP_FAILED){
+  assert(guard[0]==0x1234abcd);
+  assert(base!=first);
+  assert(munmap(guard,4*SZ_16K)==0);
+ }
  /* An occupied hint must be refused without overwriting the original page. */
  root[0]=0x5a5aa5a5;
  assert(map_exact_no_clobber(root,4*SZ_16K)==MAP_FAILED);
