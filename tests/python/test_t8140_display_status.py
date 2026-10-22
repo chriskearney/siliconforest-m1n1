@@ -26,7 +26,8 @@ static const void *fixture_getprop(const void *blob, int node, const char *name,
     (void)blob;
     (void)node;
     assert(!strcmp(name, "status"));
-    *length = test_length;
+    if (length)
+        *length = test_length;
     return test_property;
 }
 #define fdt_getprop fixture_getprop
